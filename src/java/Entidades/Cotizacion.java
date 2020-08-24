@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Cotizacion.findAll", query = "SELECT c FROM Cotizacion c")
     , @NamedQuery(name = "Cotizacion.findByIdCotizacion", query = "SELECT c FROM Cotizacion c WHERE c.idCotizacion = :idCotizacion")
+    , @NamedQuery(name = "Cotizacion.findByNumFactura", query = "SELECT c FROM Cotizacion c WHERE c.numFactura = :numFactura")
     , @NamedQuery(name = "Cotizacion.findByDetalle", query = "SELECT c FROM Cotizacion c WHERE c.detalle = :detalle")
     , @NamedQuery(name = "Cotizacion.findByCantidad", query = "SELECT c FROM Cotizacion c WHERE c.cantidad = :cantidad")
     , @NamedQuery(name = "Cotizacion.findByPrecioCompra", query = "SELECT c FROM Cotizacion c WHERE c.precioCompra = :precioCompra")
@@ -53,6 +54,11 @@ public class Cotizacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "idCotizacion")
     private Integer idCotizacion;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "num_factura")
+    private String numFactura;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 300)
@@ -103,8 +109,9 @@ public class Cotizacion implements Serializable {
         this.idCotizacion = idCotizacion;
     }
 
-    public Cotizacion(Integer idCotizacion, String detalle, int cantidad, double precioCompra, Date fecha, Date hora, String estado) {
+    public Cotizacion(Integer idCotizacion, String numFactura, String detalle, int cantidad, double precioCompra, Date fecha, Date hora, String estado) {
         this.idCotizacion = idCotizacion;
+        this.numFactura = numFactura;
         this.detalle = detalle;
         this.cantidad = cantidad;
         this.precioCompra = precioCompra;
@@ -119,6 +126,14 @@ public class Cotizacion implements Serializable {
 
     public void setIdCotizacion(Integer idCotizacion) {
         this.idCotizacion = idCotizacion;
+    }
+
+    public String getNumFactura() {
+        return numFactura;
+    }
+
+    public void setNumFactura(String numFactura) {
+        this.numFactura = numFactura;
     }
 
     public String getDetalle() {

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.model.SelectItem;
@@ -43,6 +44,11 @@ public class CotizacionControlador implements Serializable {
     private Servicio servicio;
     private Estampado estampado;
     private List<SelectItem> cantidad; // lista para almacenar num 1-200
+    // Generar numero de factura aleatorio
+    Random rnd = new Random();
+    String abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String numfactura = "";
+    int pos = 0, num;
 
     @EJB
     CotizacionFacade cotizacionFacade;
@@ -67,19 +73,28 @@ public class CotizacionControlador implements Serializable {
         estampado = new Estampado();
     }
 
+    // Generar cotizacion
     public void registrar(int tipoCotizacion, double precioUnidad) {
-        cotizacion.setIdUsuario(usuarioFacade.find(4));
         // Generar fecha y hora actual al momento del registro
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         Date time = cal.getTime();
+        // Calcular precio total
+        double precioTotalP = cotizacion.getCantidad() * precioUnidad;
+        // Generar num factura
+        pos = (int) (rnd.nextDouble() * abecedario.length() - 1 + 0);
+        num = (int) (rnd.nextDouble() * 9999 + 1000);
+        // Estructura num factura
+        this.numfactura = this.numfactura + this.abecedario.charAt(pos)
+                + this.abecedario.charAt(pos + 2) + num + this.abecedario.charAt(pos - 1)
+                + this.abecedario.charAt(pos - 2) + this.abecedario.charAt(pos);
+        // Setear valores
+        cotizacion.setIdUsuario(usuarioFacade.find(4));
         cotizacion.setHora(time);
         cotizacion.setFecha(date);
         cotizacion.setEstado("Pendiente");
-        // Calcular precio total
-        double precioTotalP = cotizacion.getCantidad() * precioUnidad;
         cotizacion.setPrecioCompra(precioTotalP);
-
+        cotizacion.setNumFactura(numfactura);
         // Si es 1 Cotiza un producto, Si es 2 cotiza un estampado y sino cotiza un servicio :)
         switch (tipoCotizacion) {
             case 1:
@@ -113,10 +128,15 @@ public class CotizacionControlador implements Serializable {
         }
         return String.format("$%,.2f", precioF);
     }
-    
+
     // Metodo para mostrar precio en pesos.
     public String getPrecioUnidad(Double precioUnidad) {
         return String.format("$%,.2f", precioUnidad);
+    }
+
+    // Consultar cotizacion
+    public List<Cotizacion> consultarTodos() {
+        return cotizacionFacade.findAll();
     }
 
     //------------------ Metodos Get y Set -----------------------------
