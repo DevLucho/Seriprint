@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nombre:" for="nombre" />
+                    <h:inputText id="nombre" value="#{insumoControlador.insumo.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                    <h:outputLabel value="Cantidad:" for="cantidad" />
+                    <h:inputText id="cantidad" value="#{insumoControlador.insumo.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
+                    <h:outputLabel value="Fechavencimiento:" for="fechavencimiento" />
+                    <h:inputText a:type="date" id="fechavencimiento" value="#{insumoControlador.insumo.fechavencimiento}" title="Fechavencimiento" required="true" requiredMessage="The Fechavencimiento field is required.">
+                        <f:convertDateTime pattern="yyyy-mm-dd" />
+                    </h:inputText>
+                    <h:outputLabel value="IdTipoinsumo:" for="idTipoinsumo" />
+                    <h:selectOneMenu id="idTipoinsumo" value="#{insumoControlador.tipoDeInsumo.idTipoinsumo}" title="IdTipoinsumo" required="true" requiredMessage="The IdTipoinsumo field is required.">
+                        <f:selectItems value="#{fixme}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandButton action="#{insumoControlador.registrar()}" value="Guardar"/>
+            </h:form>
+        </f:view>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <h:dataTable value="#{insumoControlador.consultarTodos()}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdInsumo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idInsumo}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombre"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombre}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Cantidad"/>
+                        </f:facet>
+                        <h:outputText value="#{item.cantidad}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fechavencimiento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fechavencimiento}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdTipoinsumo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idTipoinsumo}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Opciones"/>
+                        </f:facet>
+                        <h:commandButton value="Editar" action="#{insumoControlador.preactualizar(item)}"/>
+                        <h:commandButton value="Eliminar" action="#{insumoControlador.eliminar(item)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
+
+    </h:body>
+</html>
+

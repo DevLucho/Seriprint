@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Ubicacion:" for="ubicacion" />
+                    <h:inputText id="ubicacion" value="#{bodegaControlador.bodega.ubicacion}" title="Ubicacion" required="true" requiredMessage="The Ubicacion field is required."/>
+                    <h:outputLabel value="Capacidadbodega:" for="capacidadbodega" />
+                    <h:inputText id="capacidadbodega" value="#{bodegaControlador.bodega.capacidadbodega}" title="Capacidadbodega" required="true" requiredMessage="The Capacidadbodega field is required."/>
+                    
+                    <h:commandButton action="#{bodegaControlador.crearBodega()}" value="Crear"/>
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <h:dataTable value="#{bodegaControlador.consultarTodos()}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdBodega"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idBodega}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ubicacion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.ubicacion}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Capacidadbodega"/>
+                        </f:facet>
+                        <h:outputText value="#{item.capacidadbodega}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Opciones"/>
+                        </f:facet>
+                        <h:commandButton action="#{bodegaControlador.eliminar(item)}" value="Eliminar"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

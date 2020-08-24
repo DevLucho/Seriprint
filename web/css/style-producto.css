@@ -1,0 +1,44 @@
+*{
+    padding: 0;
+    margin: 4px 5px 2px 2px;
+    box-sizing: border-box;
+}
+.imagen{
+    margin-top: 0;
+    margin-left: 2.5vw;
+}
+.borde{
+    border: 1px solid black;
+}
+.derecha{
+    margin-top: 2px;
+    margin-right: 2.5vw;
+}
+img{
+    height: 96vh;
+    /*width: 70vw;*/
+}
+.form-control{
+    background: #6C757D !important;
+    color: white !important;
+    padding: 0 2px;
+    margin: 0 0px;
+}
+.btn-toolbar{
+    margin-top: 8vh;
+}
+.btn-toolbar .c1, .c2, .c3{
+    background: #0E4696 !important;
+    border: 1px #282923 solid;
+}
+a, a:hover{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+}
+h1,h3{
+    color: #0E4696;
+}
+h1,h2{
+    text-align: center;
+}

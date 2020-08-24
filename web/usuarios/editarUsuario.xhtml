@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+            <h:form>
+                <h1><h:outputText value="Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Ndocumento:" for="ndocumento" />
+                    <h:inputText id="ndocumento" value="#{usuarioControlador.usuario.ndocumento}" title="Ndocumento" required="true" requiredMessage="The Ndocumento field is required."/>
+                    <h:outputLabel value="Nombres:" for="nombres" />
+                    <h:inputText id="nombres" value="#{usuarioControlador.usuario.nombres}" title="Nombres" required="true" requiredMessage="The Nombres field is required."/>
+                    <h:outputLabel value="Apellidos:" for="apellidos" />
+                    <h:inputText id="apellidos" value="#{usuarioControlador.usuario.apellidos}" title="Apellidos" required="true" requiredMessage="The Apellidos field is required."/>
+                    <h:outputLabel value="Direccion:" for="direccion" />
+                    <h:inputText id="direccion" value="#{usuarioControlador.usuario.direccion}" title="Direccion" required="true" requiredMessage="The Direccion field is required."/>
+                    <h:outputLabel value="Telefono:" for="telefono" />
+                    <h:inputText id="telefono" value="#{usuarioControlador.usuario.telefono}" title="Telefono" required="true" requiredMessage="The Telefono field is required."/>
+                    <h:outputLabel value="Correoelectronico:" for="correoelectronico" />
+                    <h:inputText id="correoelectronico" value="#{usuarioControlador.usuario.correoelectronico}" title="Correoelectronico" required="true" requiredMessage="The Correoelectronico field is required."/>
+                    <h:outputLabel value="Contrasea:" for="contrasea" />
+                    <h:inputText a:type="password" id="contrasea" value="#{usuarioControlador.usuario.contrasena}" title="Contrasea" required="true" requiredMessage="The Contrasea field is required."/>
+                    <h:outputLabel value="Fecha:" for="fecha" />
+                    <h:inputText a:type="date" class="form-control" id="fechaFin" value="#{usuarioControlador.usuario.fecha}" required="required"> 
+                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                    </h:inputText>
+                    <h:outputLabel value="IdRol:" for="idRol" />
+                    <h:selectOneMenu id="idRol" value="#{usuarioControlador.rol.idRol}" title="IdRol" required="true" requiredMessage="The IdRol field is required.">
+                        <!-- TODO: update below reference to list of available items-->
+                        <f:selectItems value="#{rolControlador.consulta()}" var="rol" itemValue="#{rol.idRol}" itemLabel="#{rol.nombrerol}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="Estado" for="Estado" />
+                    <h:selectOneMenu value="#{usuarioControlador.usuario.estado}">
+                        <f:selectItem itemLabel="Activo" itemValue="Activo"/>
+                        <f:selectItem itemLabel="Inactivo" itemValue="Inactivo"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandButton action="#{usuarioControlador.actualizar()}" value="Actualizar"/>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+

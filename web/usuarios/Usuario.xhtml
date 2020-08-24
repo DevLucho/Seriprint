@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Ndocumento:" for="ndocumento" />
+                    <h:inputText id="ndocumento" value="#{usuarioControlador.usuario.ndocumento}" title="Ndocumento" required="true" requiredMessage="The Ndocumento field is required."/>
+                    <h:outputLabel value="Nombres:" for="nombres" />
+                    <h:inputText id="nombres" value="#{usuarioControlador.usuario.nombres}" title="Nombres" required="true" requiredMessage="The Nombres field is required."/>
+                    <h:outputLabel value="Apellidos:" for="apellidos" />
+                    <h:inputText id="apellidos" value="#{usuarioControlador.usuario.apellidos}" title="Apellidos" required="true" requiredMessage="The Apellidos field is required."/>
+                    <h:outputLabel value="Direccion:" for="direccion" />
+                    <h:inputText id="direccion" value="#{usuarioControlador.usuario.direccion}" title="Direccion" required="true" requiredMessage="The Direccion field is required."/>
+                    <h:outputLabel value="Telefono:" for="telefono" />
+                    <h:inputText id="telefono" value="#{usuarioControlador.usuario.telefono}" title="Telefono" required="true" requiredMessage="The Telefono field is required."/>
+                    <h:outputLabel value="Correoelectronico:" for="correoelectronico" />
+                    <h:inputText id="correoelectronico" value="#{usuarioControlador.usuario.correoelectronico}" title="Correoelectronico" required="true" requiredMessage="The Correoelectronico field is required."/>
+                    <h:outputLabel value="Contrasea:" for="contrasea" />
+                    <h:inputText a:type="password" id="contrasea" value="#{usuarioControlador.usuario.contrasena}" title="Contrasea" required="true" requiredMessage="The Contrasea field is required."/>
+                    <h:outputLabel value="Fecha:" for="fecha" />
+                    <h:inputText a:type="date" class="form-control" id="fechaFin" value="#{usuarioControlador.usuario.fecha}" required="required"> 
+                        <f:convertDateTime pattern="yyyy-mm-dd" />
+                    </h:inputText>
+                    <h:outputLabel value="IdRol:" for="idRol" />
+                    <h:selectOneMenu id="idRol" value="#{usuarioControlador.rol.idRol}" title="IdRol" required="true" requiredMessage="The IdRol field is required.">
+                        <f:selectItem itemValue="" itemLabel="Seleccionar" a:selected="true" a:disabled="true"/>
+                        <f:selectItems value="#{rolControlador.consulta()}" var="rol" itemValue="#{rol.idRol}" itemLabel="#{rol.nombrerol}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandButton action="#{usuarioControlador.registrar()}" value="Registrar"/>
+            </h:form>
+        </f:view>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <h:dataTable value="#{usuarioControlador.consultarEstado('Activo')}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdUsuario"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idUsuario}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ndocumento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.ndocumento}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Direccion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.direccion}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Telefono"/>
+                        </f:facet>
+                        <h:outputText value="#{item.telefono}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Correoelectronico"/>
+                        </f:facet>
+                        <h:outputText value="#{item.correoelectronico}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Contrasena"/>
+                        </f:facet>
+                        <h:outputText value="#{item.contrasena}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fecha"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fecha}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Estado"/>
+                        </f:facet>
+                        <h:outputText value="#{item.estado}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdRol"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idRol.nombrerol}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Opciones"/>
+                        </f:facet>
+                        <h:commandButton value="Remover" action="#{usuarioControlador.cambiarEstado(item, 'Inactivo')}"/>
+                        <h:commandButton value="Editar" action="#{usuarioControlador.preactualizar(item)}"/>
+                        <h:commandButton value="Eliminar" action="#{usuarioControlador.eliminar(item)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
+         <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <h:dataTable value="#{usuarioControlador.consultarEstado('Inactivo')}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdUsuario"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idUsuario}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Ndocumento"/>
+                        </f:facet>
+                        <h:outputText value="#{item.ndocumento}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Nombres"/>
+                        </f:facet>
+                        <h:outputText value="#{item.nombres}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Apellidos"/>
+                        </f:facet>
+                        <h:outputText value="#{item.apellidos}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Direccion"/>
+                        </f:facet>
+                        <h:outputText value="#{item.direccion}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Telefono"/>
+                        </f:facet>
+                        <h:outputText value="#{item.telefono}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Correoelectronico"/>
+                        </f:facet>
+                        <h:outputText value="#{item.correoelectronico}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Contrasena"/>
+                        </f:facet>
+                        <h:outputText value="#{item.contrasena}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fecha"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fecha}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Estado"/>
+                        </f:facet>
+                        <h:outputText value="#{item.estado}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdRol"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idRol.nombrerol}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Opciones"/>
+                        </f:facet>
+                        <h:commandButton value="Restaurar" action="#{usuarioControlador.cambiarEstado(item, 'Activo')}"/>
+                        <h:commandButton value="Editar" action="#{usuarioControlador.preactualizar(item)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        
+
+    </h:body>
+</html>
+

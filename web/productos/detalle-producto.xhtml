@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>        
+        <link href="../css/style-producto.css" rel="stylesheet" type="text/css"/>
+        <title>Detalle producto | #{productoControlador.producto.nombre}</title>
+    </h:head>
+    <h:body>
+
+        <div class="contr">
+            <div class="contenedor d-flex justify-content-right">
+                <div class="imagen">
+                    <img class="borde col-12 col-sm-12 col-md-6 col-lg-11" src="#{productoControlador.producto.imagen}" alt=""/>
+                </div>
+
+                <div class="borde derecha col-12 col-sm-12 col-md-6 col-lg-5 ">
+                    <h:form class="formulario col-12 ">
+                        <h1>#{productoControlador.producto.nombre}</h1>
+                        <hr/>
+                        <h2>Descripcion del producto</h2>
+                        <hr/>
+                        <p align="justify">#{productoControlador.producto.descripcion}</p>
+                        <hr/>
+                        <h3>Precio unidad:       $#{productoControlador.producto.preciounidad}</h3>
+                        <hr/>
+                        <h3>Precio total:       $#{cotizacionControlador.calcularPrecio(productoControlador.producto)}</h3>
+                        <hr/>
+                        <!-- Dropdown list -->
+                        <h3>Cantidad</h3>
+                        <h:selectOneMenu id="inputState" class="form-control col-sm-12 col-md-6 col-lg-3">
+                            <f:selectItems value="#{cotizacionControlador.cantidads}"></f:selectItems>
+                        </h:selectOneMenu>
+                        <hr/>
+                        <h:selectOneMenu style="display: none;" value="#{cotizacionControlador.producto.idProducto}">
+                            <f:selectItem itemValue="#{productoControlador.producto.idProducto}"></f:selectItem>
+                        </h:selectOneMenu>
+                        <h3>Detalle</h3>
+                        <!--
+                        <h:inputTextarea class="form-control" value="#{cotizacionControlador.cotizacion.detalle}"></h:inputTextarea>
+                        -->
+                        <hr/>
+                        <div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class=" btn-group mr-2" role="group" aria-label="Second group">
+                                <h:commandButton value="Generar cotización" class="c2 btn btn-secondary" action="#{cotizacionControlador.registrar(1)}"></h:commandButton>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </h:body>
+</html>
+

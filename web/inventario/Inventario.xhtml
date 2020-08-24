@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="IdUsuario:" for="idUsuario" />
+                    <h:selectOneMenu id="idUsuario" value="#{inventarioControlador.usuario.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required.">
+                        <!-- TODO: update below reference to list of available items-->
+                        <f:selectItems value="#{usuarioControlador.consultarTodos()}" var="u" itemValue="#{u.idUsuario}" itemLabel="#{u.nombres}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="IdBodega:" for="idBodega" />
+                    <h:selectOneMenu id="idBodega" value="#{inventarioControlador.bodega.idBodega}" title="IdBodega" required="true" requiredMessage="The IdBodega field is required.">
+                        <!-- TODO: update below reference to list of available items-->
+                        <f:selectItems value="#{bodegaControlador.consultarTodos()}" var="b" itemValue="#{b.idBodega}" itemLabel="#{b.ubicacion}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="Seleccione" />
+                    <h:selectOneMenu id="opcion" value="#{inventarioControlador.opcion}" onchange="submit();" required="true" requiredMessage="Requerido">
+                        <f:selectItem itemValue="" itemLabel="Seleccione" ></f:selectItem>
+                        <f:selectItem itemValue="1" itemLabel="Producto"></f:selectItem>
+                        <f:selectItem itemValue="2" itemLabel="Insumo"></f:selectItem>
+                    </h:selectOneMenu>
+                    <c:if test="#{inventarioControlador.opcion == 1}">
+                        <h:outputLabel value="IdProducto:" for="idProducto" />
+                        <h:selectOneMenu id="idProducto" value="#{inventarioControlador.producto.idProducto}" title="IdProducto" >
+                            <!-- TODO: update below reference to list of available items-->
+                            <f:selectItems value="#{productoControlador.consultarTodos()}" var="p" itemValue="#{p.idProducto}" itemLabel="#{p.nombre}"/>
+                        </h:selectOneMenu>
+                    </c:if>
+                    <c:if test="#{inventarioControlador.opcion == 2}">
+                        <h:outputLabel value="IdInsumo:" for="idInsumo" />
+                        <h:selectOneMenu id="idInsumo" value="#{inventarioControlador.insumo.idInsumo}" title="IdInsumo" >
+                            <f:selectItems value="#{insumoControlador.consultarTodos()}" var="i" itemValue="#{i.idInsumo}" itemLabel="#{i.nombre}"/>
+                        </h:selectOneMenu>
+                    </c:if>
+                    <h:commandButton action="#{inventarioControlador.registar()}" value="Agragar al inventario"></h:commandButton>
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="List"/></h1>
+                <h:dataTable value="#{inventarioControlador.consultarTodos()}" var="item">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdInventario"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idInventario}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fechaingreso"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fechaingreso}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fechasalida"/>
+                        </f:facet>
+                        <h:outputText value="#{item.fechasalida}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Responsable"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idUsuario.nombres}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="IdBodega"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idBodega.ubicacion}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Articulo"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto.nombre}"/>
+                        <h:outputText value="#{item.idInsumo.nombre}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Cantidad"/>
+                        </f:facet>
+                        <h:outputText value="#{item.idProducto.cantidad}"/>
+                        <h:outputText value="#{item.idInsumo.cantidad}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

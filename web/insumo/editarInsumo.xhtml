@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nombre:" for="nombre" />
+                    <h:inputText id="nombre" value="#{insumoControlador.insumo.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                    <h:outputLabel value="Cantidad:" for="cantidad" />
+                    <h:inputText id="cantidad" value="#{insumoControlador.insumo.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
+                    <h:outputLabel value="Fechavencimiento:" for="fechavencimiento" />
+                    <h:inputText id="fechavencimiento" value="#{insumoControlador.insumo.fechavencimiento}" title="Fechavencimiento" required="true" requiredMessage="The Fechavencimiento field is required.">
+                        <f:convertDateTime pattern="yyyy-MM-dd" />
+                    </h:inputText>
+                    <h:outputLabel value="IdTipoinsumo:" for="idTipoinsumo" />
+                    <h:selectOneMenu id="idTipoinsumo" value="#{insumoControlador.insumo.idTipoinsumo}" title="IdTipoinsumo" required="true" requiredMessage="The IdTipoinsumo field is required.">
+                        <!-- TODO: update below reference to list of available items-->
+                        <f:selectItems value="#{fixme}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </h:form>
+        </f:view>
+
+    </h:body>
+</html>
+

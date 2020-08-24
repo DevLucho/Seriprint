@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <f:view>
+            <h:form>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Nombre:" for="nombre" />
+                    <h:inputText id="nombre" value="#{productoControlador.producto.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
+                    <h:outputLabel value="Descripcion:" for="descripcion" />
+                    <h:inputText id="descripcion" value="#{productoControlador.producto.descripcion}" title="Descripcion" required="true" requiredMessage="The Descripcion field is required."/>
+                    <h:outputLabel value="Imagen:" for="imagen" />
+                    <h:inputText id="imagen" value="#{productoControlador.producto.imagen}" title="Imagen" required="true" requiredMessage="The Imagen field is required."/>
+                    <h:outputLabel value="Preciounidad:" for="preciounidad" />
+                    <h:inputText id="preciounidad" value="#{productoControlador.producto.preciounidad}" title="Preciounidad" required="true" requiredMessage="The Preciounidad field is required."/>
+                    <h:outputLabel value="Cantidad:" for="cantidad" />
+                    <h:inputText id="cantidad" value="#{productoControlador.producto.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
+                    <h:outputLabel value="IdTipoproducto:" for="idTipoproducto" />
+                    <h:selectOneMenu id="idTipoproducto" value="#{productoControlador.tipoDeProducto.idTipoproducto}" title="IdTipoproducto" required="true" requiredMessage="The IdTipoproducto field is required.">
+                        <f:selectItems value="#{productoControlador.consultarTipoP()}" var="tipo" itemValue="#{tipo.idTipoproducto}" itemLabel="#{tipo.nombres}"/>
+                    </h:selectOneMenu>
+                    <!--
+                    <h:outputLabel value="Preciocompra:" for="preciocompra" />
+                    <h:inputText id="preciocompra" value="#{productoControlador.producto.preciocompra}" title="Preciocompra" />
+                    <h:outputLabel value="Precioventa:" for="precioventa" />
+                    <h:inputText id="precioventa" value="#{productoControlador.producto.precioventa}" title="Precioventa" />
+                    <h:outputLabel value="Descuento:" for="descuento" />
+                    <h:inputText id="descuento" value="#{productoControlador.producto.descuento}" title="Descuento" />
+                    -->
+                </h:panelGrid>
+                <h:commandButton value="Agregar" action="#{productoControlador.registrar()}"></h:commandButton>
+            </h:form>
+        </f:view>
+    </h:body>
+</html>
+
