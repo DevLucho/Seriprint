@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>        
         <link href="../css/style-producto.css" rel="stylesheet" type="text/css"/>
@@ -25,27 +26,32 @@
                         <hr/>
                         <p align="justify">#{productoControlador.producto.descripcion}</p>
                         <hr/>
-                        <h3>Precio unidad:       $#{productoControlador.producto.preciounidad}</h3>
-                        <hr/>
-                        <h3>Precio total:       $#{cotizacionControlador.calcularPrecio(productoControlador.producto)}</h3>
+                        <h3>Precio unidad:       #{cotizacionControlador.getPrecioUnidad(productoControlador.producto.preciounidad)}</h3>
                         <hr/>
                         <!-- Dropdown list -->
                         <h3>Cantidad</h3>
-                        <h:selectOneMenu id="inputState" class="form-control col-sm-12 col-md-6 col-lg-3">
-                            <f:selectItems value="#{cotizacionControlador.cantidads}"></f:selectItems>
+                        <h:selectOneMenu id="inputState" class="form-control col-sm-12 col-md-6 col-lg-3" value="#{cotizacionControlador.cotizacion.cantidad}" onchange="submit();">
+                            <f:selectItem itemValue="0" itemLabel="- Seleccione -" a:selected="true"></f:selectItem>
+                            <f:selectItems value="#{cotizacionControlador.cantidadProducto()}"></f:selectItems>
                         </h:selectOneMenu>
-                        <hr/>
+                        <h:message for="inputState" style="color:red"/>
+                        
+                        <c:if test="#{cotizacionControlador.cotizacion.cantidad!=0}">
+                            <h3>Precio total:       #{cotizacionControlador.calcularPrecio(cotizacionControlador.cotizacion.cantidad,productoControlador.producto.preciounidad)}</h3>
+                            <hr/>
+                        </c:if>
+                        
                         <h:selectOneMenu style="display: none;" value="#{cotizacionControlador.producto.idProducto}">
                             <f:selectItem itemValue="#{productoControlador.producto.idProducto}"></f:selectItem>
                         </h:selectOneMenu>
+
                         <h3>Detalle</h3>
-                        <!--
-                        <h:inputTextarea class="form-control" value="#{cotizacionControlador.cotizacion.detalle}"></h:inputTextarea>
-                        -->
+                        <h:inputTextarea id="detalle" class="form-control" value="#{cotizacionControlador.cotizacion.detalle}"></h:inputTextarea>
+                        <h:message for="detalle" style="color:red"/>
                         <hr/>
                         <div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
                             <div class=" btn-group mr-2" role="group" aria-label="Second group">
-                                <h:commandButton value="Generar cotización" class="c2 btn btn-secondary" action="#{cotizacionControlador.registrar(1)}"></h:commandButton>
+                                <h:commandButton value="Generar cotización" class="c2 btn btn-secondary" action="#{cotizacionControlador.registrar(1,productoControlador.producto.preciounidad)}"></h:commandButton>
                             </div>
                         </div>
                     </h:form>

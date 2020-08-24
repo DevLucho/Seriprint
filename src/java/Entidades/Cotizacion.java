@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cotizacion.findByIdCotizacion", query = "SELECT c FROM Cotizacion c WHERE c.idCotizacion = :idCotizacion")
     , @NamedQuery(name = "Cotizacion.findByDetalle", query = "SELECT c FROM Cotizacion c WHERE c.detalle = :detalle")
     , @NamedQuery(name = "Cotizacion.findByCantidad", query = "SELECT c FROM Cotizacion c WHERE c.cantidad = :cantidad")
+    , @NamedQuery(name = "Cotizacion.findByPrecioCompra", query = "SELECT c FROM Cotizacion c WHERE c.precioCompra = :precioCompra")
     , @NamedQuery(name = "Cotizacion.findByFecha", query = "SELECT c FROM Cotizacion c WHERE c.fecha = :fecha")
     , @NamedQuery(name = "Cotizacion.findByHora", query = "SELECT c FROM Cotizacion c WHERE c.hora = :hora")
     , @NamedQuery(name = "Cotizacion.findByEstado", query = "SELECT c FROM Cotizacion c WHERE c.estado = :estado")})
@@ -61,6 +62,10 @@ public class Cotizacion implements Serializable {
     @NotNull
     @Column(name = "Cantidad")
     private int cantidad;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "precio_compra")
+    private double precioCompra;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Fecha")
@@ -98,10 +103,11 @@ public class Cotizacion implements Serializable {
         this.idCotizacion = idCotizacion;
     }
 
-    public Cotizacion(Integer idCotizacion, String detalle, int cantidad, Date fecha, Date hora, String estado) {
+    public Cotizacion(Integer idCotizacion, String detalle, int cantidad, double precioCompra, Date fecha, Date hora, String estado) {
         this.idCotizacion = idCotizacion;
         this.detalle = detalle;
         this.cantidad = cantidad;
+        this.precioCompra = precioCompra;
         this.fecha = fecha;
         this.hora = hora;
         this.estado = estado;
@@ -129,6 +135,14 @@ public class Cotizacion implements Serializable {
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public double getPrecioCompra() {
+        return precioCompra;
+    }
+
+    public void setPrecioCompra(double precioCompra) {
+        this.precioCompra = precioCompra;
     }
 
     public Date getFecha() {

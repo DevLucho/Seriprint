@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.model.SelectItem;
 
 /**
  *
@@ -42,9 +42,7 @@ public class CotizacionControlador implements Serializable {
     private Producto producto;
     private Servicio servicio;
     private Estampado estampado;
-    private List<Integer> cantidad = new ArrayList<>();
-    private int op;
-    private double precioTotal;
+    private List<SelectItem> cantidad; // lista para almacenar num 1-200
 
     @EJB
     CotizacionFacade cotizacionFacade;
@@ -69,9 +67,8 @@ public class CotizacionControlador implements Serializable {
         estampado = new Estampado();
     }
 
-    public void registrar(int tipoCotizacion) {
+    public void registrar(int tipoCotizacion, double precioUnidad) {
         cotizacion.setIdUsuario(usuarioFacade.find(4));
-
         // Generar fecha y hora actual al momento del registro
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -79,7 +76,9 @@ public class CotizacionControlador implements Serializable {
         cotizacion.setHora(time);
         cotizacion.setFecha(date);
         cotizacion.setEstado("Pendiente");
-        cotizacion.setDetalle("eee");
+        // Calcular precio total
+        double precioTotalP = cotizacion.getCantidad() * precioUnidad;
+        cotizacion.setPrecioCompra(precioTotalP);
 
         // Si es 1 Cotiza un producto, Si es 2 cotiza un estampado y sino cotiza un servicio :)
         switch (tipoCotizacion) {
@@ -97,21 +96,27 @@ public class CotizacionControlador implements Serializable {
         cotizacionFacade.create(cotizacion);
     }
 
-    public List<Integer> cantidads() {
+    // Metodo para registrar y mostrar 200 numeros 
+    public List<SelectItem> cantidadProducto() {
+        this.cantidad = new ArrayList<>();
         for (int i = 1; i <= 200; i++) {
-            this.cantidad.add(i);
+            this.cantidad.add(new SelectItem(i, "" + i + ""));
         }
         return this.cantidad;
     }
 
-    public double calcularPrecio(Producto producto) {
-        precioTotal = producto.getPreciounidad();
+    // Calcular precio dependiendo de la cantidad elegida
+    public String calcularPrecio(int cantidadProducto, double precioUnidad) {
+        double precioF = precioUnidad;
         for (int i = 1; i <= 200; i++) {
-            if (this.cantidad.get(i) == op) {
-                precioTotal = precioTotal * op;
-            }
+            precioF = cantidadProducto * precioUnidad;
         }
-        return precioTotal;
+        return String.format("$%,.2f", precioF);
+    }
+    
+    // Metodo para mostrar precio en pesos.
+    public String getPrecioUnidad(Double precioUnidad) {
+        return String.format("$%,.2f", precioUnidad);
     }
 
     //------------------ Metodos Get y Set -----------------------------
@@ -155,27 +160,4 @@ public class CotizacionControlador implements Serializable {
         this.servicio = servicio;
     }
 
-    public List<Integer> getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(List<Integer> cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public int getOp() {
-        return op;
-    }
-
-    public void setOp(int op) {
-        this.op = op;
-    }
-
-    public double getPrecioUnidad() {
-        return precioTotal;
-    }
-
-    public void setPrecioUnidad(double precioTotal) {
-        this.precioTotal = precioTotal;
-    }
 }

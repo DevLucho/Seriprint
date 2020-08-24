@@ -39,7 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Producto.findByDescripcion", query = "SELECT p FROM Producto p WHERE p.descripcion = :descripcion")
     , @NamedQuery(name = "Producto.findByImagen", query = "SELECT p FROM Producto p WHERE p.imagen = :imagen")
     , @NamedQuery(name = "Producto.findByPreciounidad", query = "SELECT p FROM Producto p WHERE p.preciounidad = :preciounidad")
-    , @NamedQuery(name = "Producto.findByPreciocompra", query = "SELECT p FROM Producto p WHERE p.preciocompra = :preciocompra")
     , @NamedQuery(name = "Producto.findByPrecioventa", query = "SELECT p FROM Producto p WHERE p.precioventa = :precioventa")
     , @NamedQuery(name = "Producto.findByCantidad", query = "SELECT p FROM Producto p WHERE p.cantidad = :cantidad")
     , @NamedQuery(name = "Producto.findByDescuento", query = "SELECT p FROM Producto p WHERE p.descuento = :descuento")})
@@ -69,18 +68,17 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Precio_unidad")
-    private long preciounidad;
-    @Column(name = "Precio_compra")
-    private Long preciocompra;
+    private double preciounidad;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "Precio_venta")
-    private Long precioventa;
+    private Double precioventa;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 500)
     @Column(name = "Cantidad")
     private String cantidad;
     @Column(name = "Descuento")
-    private Long descuento;
+    private Double descuento;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
     private List<Cotizacion> cotizacionList;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
@@ -96,7 +94,7 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Producto(Integer idProducto, String nombre, String descripcion, String imagen, long preciounidad, String cantidad) {
+    public Producto(Integer idProducto, String nombre, String descripcion, String imagen, double preciounidad, String cantidad) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -137,27 +135,19 @@ public class Producto implements Serializable {
         this.imagen = imagen;
     }
 
-    public long getPreciounidad() {
+    public double getPreciounidad() {
         return preciounidad;
     }
 
-    public void setPreciounidad(long preciounidad) {
+    public void setPreciounidad(double preciounidad) {
         this.preciounidad = preciounidad;
     }
 
-    public Long getPreciocompra() {
-        return preciocompra;
-    }
-
-    public void setPreciocompra(Long preciocompra) {
-        this.preciocompra = preciocompra;
-    }
-
-    public Long getPrecioventa() {
+    public Double getPrecioventa() {
         return precioventa;
     }
 
-    public void setPrecioventa(Long precioventa) {
+    public void setPrecioventa(Double precioventa) {
         this.precioventa = precioventa;
     }
 
@@ -169,11 +159,11 @@ public class Producto implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public Long getDescuento() {
+    public Double getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(Long descuento) {
+    public void setDescuento(Double descuento) {
         this.descuento = descuento;
     }
 

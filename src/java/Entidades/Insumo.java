@@ -62,7 +62,7 @@ public class Insumo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Precio_compra")
-    private long preciocompra;
+    private double preciocompra;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Fecha_vencimiento")
@@ -81,7 +81,7 @@ public class Insumo implements Serializable {
         this.idInsumo = idInsumo;
     }
 
-    public Insumo(Integer idInsumo, String nombre, int cantidad, long preciocompra, Date fechavencimiento) {
+    public Insumo(Integer idInsumo, String nombre, int cantidad, double preciocompra, Date fechavencimiento) {
         this.idInsumo = idInsumo;
         this.nombre = nombre;
         this.cantidad = cantidad;
@@ -113,11 +113,11 @@ public class Insumo implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public long getPreciocompra() {
+    public double getPreciocompra() {
         return preciocompra;
     }
 
-    public void setPreciocompra(long preciocompra) {
+    public void setPreciocompra(double preciocompra) {
         this.preciocompra = preciocompra;
     }
 
