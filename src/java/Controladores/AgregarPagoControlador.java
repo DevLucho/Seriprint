@@ -14,8 +14,10 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 
 /**
  *
@@ -28,6 +30,8 @@ public class AgregarPagoControlador implements Serializable {
     /**
      * Creates a new instance of AgregarPagoControlador
      */
+    @Inject
+    private MensajeControlador mensaje;
     private AgregarPago agregarPago;
     private Cotizacion cotizacion;
     @EJB
@@ -44,13 +48,30 @@ public class AgregarPagoControlador implements Serializable {
         cotizacion = new Cotizacion();
     }
 
-    public void registrar() {
+    public void registrar(Cotizacion cotizacion) {
         agregarPago.setIdCotizacion(cotizacionFacade.find(cotizacion.getIdCotizacion()));
         // Generar fecha actual al momento del pago
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         agregarPago.setFecha(date);
         agregarPagoFacade.create(agregarPago);
+        this.cotizacion = cotizacion;
+        cotizacion.setEstado("Verificación de pago");
+        cotizacionFacade.edit(cotizacion);
+        this.agregarPago = new AgregarPago();
+        this.cotizacion = new Cotizacion();
+        mensaje.setMensaje("MensajeRedirect('./consultar-cotizacion.xhtml','Pago agregado!','Recuerda que tu cotización pasara a estado de verificación por parte del Administrador. Seras notificado cuando se apruebe','success');");
+
+    }
+    
+    public String asignarOperario(AgregarPago agregarPagos){
+        cotizacion = agregarPagos.getIdCotizacion();
+        agregarPago = agregarPagos;
+        return "detalle-pago";
+    }
+
+    public List<AgregarPago> cotizacionEstado(String estado) {
+        return agregarPagoFacade.cotizacionEstado(estado);
     }
 
     public AgregarPago getAgregarPago() {

@@ -6,9 +6,11 @@
 package Facade;
 
 import Entidades.AgregarPago;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -28,5 +30,11 @@ public class AgregarPagoFacade extends AbstractFacade<AgregarPago> {
     public AgregarPagoFacade() {
         super(AgregarPago.class);
     }
-    
+
+    public List<AgregarPago> cotizacionEstado(String estado) {
+        Query query = em.createQuery("SELECT u FROM AgregarPago u WHERE u.idCotizacion.estado=:estado");
+        query.setParameter("estado", estado);
+        return query.getResultList();
+    }
+
 }

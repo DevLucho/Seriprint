@@ -40,6 +40,10 @@
         <title>Consultar productos</title>
     </h:head>
     <h:body>
+        <a href="./crear-producto.xhtml">Crear producto</a>
+        <h:form>
+        <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
+        </h:form>
         <div class="cards-group">
             <h:form class="row">
                 <c:forEach items="#{productoControlador.consultarTodos()}" var="p">

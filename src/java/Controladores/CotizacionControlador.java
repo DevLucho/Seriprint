@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import javax.inject.Inject;
 
 /**
  *
@@ -38,6 +40,10 @@ public class CotizacionControlador implements Serializable {
     /**
      * Creates a new instance of CotizacionControlador
      */
+    @Inject
+    ProductoControlador productoD;
+    @Inject
+    private MensajeControlador mensaje;
     private Cotizacion cotizacion;
     private Usuario usuario;
     private Producto producto;
@@ -87,9 +93,9 @@ public class CotizacionControlador implements Serializable {
         // Estructura num factura
         this.numfactura = this.numfactura + this.abecedario.charAt(pos)
                 + this.abecedario.charAt(pos + 2) + num + this.abecedario.charAt(pos - 1)
-                + this.abecedario.charAt(pos - 2) + this.abecedario.charAt(pos);
+                + this.abecedario.charAt(pos);
         // Setear valores
-        cotizacion.setIdUsuario(usuarioFacade.find(4));
+        cotizacion.setIdUsuario(usuarioFacade.find(usuario.getIdUsuario()));
         cotizacion.setHora(time);
         cotizacion.setFecha(date);
         cotizacion.setEstado("Pendiente");
@@ -107,8 +113,14 @@ public class CotizacionControlador implements Serializable {
                 cotizacion.setIdServicio(servicioFacade.find(servicio.getIdServicio()));
                 break;
         }
-
         cotizacionFacade.create(cotizacion);
+        mensaje.setMensaje("MensajeRedirect('../pagos/consultar-cotizacion.xhtml','Cotización generada','Su numero de cotizacion es: " + numfactura + " Ahora seras redirigido para que continues con el proceso de compra.','success');");
+        cotizacion = new Cotizacion();
+        servicio = new Servicio();
+        usuario = new Usuario();
+        producto = new Producto();
+        estampado = new Estampado();
+        numfactura = "";
     }
 
     // Metodo para registrar y mostrar 200 numeros 
@@ -122,11 +134,19 @@ public class CotizacionControlador implements Serializable {
 
     // Calcular precio dependiendo de la cantidad elegida
     public String calcularPrecio(int cantidadProducto, double precioUnidad) {
-        double precioF = precioUnidad;
-        for (int i = 1; i <= 200; i++) {
-            precioF = cantidadProducto * precioUnidad;
-        }
+        double precioF = cantidadProducto * precioUnidad;
         return String.format("$%,.2f", precioF);
+    }
+
+    public void cancelar(Cotizacion cotizacionCancelar) {
+        if ("Cancelado".equals(cotizacionCancelar.getEstado())) {
+            mensaje.setMensaje("Mensaje3('Atención!','La cotización #" + cotizacionCancelar.getNumFactura() + " ya ha sido cancelada.','error');");
+        } else {
+            cotizacion = cotizacionCancelar;
+            cotizacion.setEstado("Cancelado");
+            cotizacionFacade.edit(cotizacion);
+            mensaje.setMensaje("Mensaje3('Exito!','La cotización #" + cotizacion.getNumFactura() + " ha sido cancelada.','success');");
+        }
     }
 
     // Metodo para mostrar precio en pesos.
@@ -134,9 +154,29 @@ public class CotizacionControlador implements Serializable {
         return String.format("$%,.2f", precioUnidad);
     }
 
+    public String generarPago(Cotizacion cotizacion) {
+        if ("Pendiente".equals(cotizacion.getEstado())) {
+            usuario = cotizacion.getIdUsuario();
+            producto = cotizacion.getIdProducto();
+            this.cotizacion = cotizacion;
+            return "agregar-pago";
+        } else {
+            mensaje.setMensaje("Mensaje3('Atención!','No puedes agregar un pago ya que su estado se encuentra: " + cotizacion.getEstado() + ".','error');");
+            return "";
+        }
+    }
+
     // Consultar cotizacion
     public List<Cotizacion> consultarTodos() {
         return cotizacionFacade.findAll();
+    }
+
+    public List<Cotizacion> cotizacionUsuario(int idUsuario) {
+        return cotizacionFacade.cotizacionUsuario(idUsuario);
+    }
+
+    public List<Cotizacion> cotizacionEstado(String estado) {
+        return cotizacionFacade.cotizacionEstado(estado);
     }
 
     //------------------ Metodos Get y Set -----------------------------

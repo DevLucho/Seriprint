@@ -7,7 +7,9 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <f:view>
+<h:form>
+        <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
+        </h:form>        <f:view>
             <h:form>
                 <h1><h:outputText value="Create/Edit"/></h1>
                 <h:panelGrid columns="2">
@@ -26,8 +28,6 @@
                         <f:selectItems value="#{productoControlador.consultarTipoP()}" var="tipo" itemValue="#{tipo.idTipoproducto}" itemLabel="#{tipo.nombres}"/>
                     </h:selectOneMenu>
                     <!--
-                    <h:outputLabel value="Preciocompra:" for="preciocompra" />
-                    <h:inputText id="preciocompra" value="#{productoControlador.producto.preciocompra}" title="Preciocompra" />
                     <h:outputLabel value="Precioventa:" for="precioventa" />
                     <h:inputText id="precioventa" value="#{productoControlador.producto.precioventa}" title="Precioventa" />
                     <h:outputLabel value="Descuento:" for="descuento" />

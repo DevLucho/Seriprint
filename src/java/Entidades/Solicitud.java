@@ -24,7 +24,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -49,8 +48,6 @@ public class Solicitud implements Serializable {
     @Basic(optional = false)
     @Column(name = "idSolicitud")
     private Integer idSolicitud;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "fechaLimite")
     @Temporal(TemporalType.DATE)
     private Date fechaLimite;
@@ -74,11 +71,6 @@ public class Solicitud implements Serializable {
 
     public Solicitud(Integer idSolicitud) {
         this.idSolicitud = idSolicitud;
-    }
-
-    public Solicitud(Integer idSolicitud, Date fechaLimite) {
-        this.idSolicitud = idSolicitud;
-        this.fechaLimite = fechaLimite;
     }
 
     public Integer getIdSolicitud() {

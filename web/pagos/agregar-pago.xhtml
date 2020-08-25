@@ -7,77 +7,29 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <h:form>
+            <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
+        </h:form>
         <f:view>
             <h:form>
-                <h1><h:outputText value="List"/></h1>
-                <h:dataTable value="#{cotizacionControlador.consultarTodos()}" var="item">
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Detalle"/>
-                        </f:facet>
-                        <h:outputText value="#{item.detalle}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Cantidad"/>
-                        </f:facet>
-                        <h:outputText value="#{item.cantidad}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="PrecioCompra"/>
-                        </f:facet>
-                        <h:outputText value="#{item.precioCompra}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Fecha"/>
-                        </f:facet>
-                        <h:outputText value="#{item.fecha}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Hora"/>
-                        </f:facet>
-                        <h:outputText value="#{item.hora}">
-                            <f:convertDateTime pattern="HH:mm:ss" />
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Estado"/>
-                        </f:facet>
-                        <h:outputText value="#{item.estado}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="IdProducto"/>
-                        </f:facet>
-                        <h:outputText value="#{item.idProducto}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="IdUsuario"/>
-                        </f:facet>
-                        <h:outputText value="#{item.idUsuario}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="IdServicio"/>
-                        </f:facet>
-                        <h:outputText value="#{item.idServicio}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="Estampado"/>
-                        </f:facet>
-                        <h:outputText value="#{item.estampado}"/>
-                    </h:column>
-                </h:dataTable>
+                <h1><h:outputText value="Create/Edit"/></h1>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="Abona:" for="abona" />
+                    <h:inputText id="abona" value="#{agregarPagoControlador.agregarPago.abona}" title="Abona" disabled="true"/>
+                    <h:outputLabel value="Saldo:" for="saldo" />
+                    <h:inputText id="saldo" value="#{agregarPagoControlador.agregarPago.saldo}" title="Saldo" disabled="true"/>
+                    <h:outputLabel value="Observacion:" for="observacion" />
+                    <h:inputText id="observacion" value="#{agregarPagoControlador.agregarPago.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required."/>
+                    <h:outputLabel value="Soporte:" for="soporte" />
+                    <h:inputText id="soporte" value="#{agregarPagoControlador.agregarPago.soporte}" title="Soporte" />
+                </h:panelGrid>
+                <h:commandButton value="Adjuntar pago" action="#{agregarPagoControlador.registrar(cotizacionControlador.cotizacion)}"/>
             </h:form>
         </f:view>
+        <!-- Sweet Alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="../js/alertas.js" type="text/javascript"></script>
+        <script>#{mensajeControlador.mensaje}</script>
     </h:body>
 </html>
 

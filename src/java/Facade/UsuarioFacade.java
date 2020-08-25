@@ -37,4 +37,33 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return query.getResultList();
     }
 
+    // Login
+    public Usuario iniciarSesion(int ndocumento, String contrasena) {
+        Usuario usuario = new Usuario();
+        try {
+            Query query;
+            query = em.createQuery("SELECT u FROM Usuario u WHERE u.ndocumento=:ndocumento and u.contrasena=:contrasena");
+            query.setParameter("ndocumento", ndocumento);
+            query.setParameter("contrasena", contrasena);
+            usuario = (Usuario) query.getResultList().get(0);
+        } catch (Exception e) {
+            System.out.println("Error en login revisar: " + e.getMessage());
+        }
+        return usuario;
+    }
+
+    // Variable de sesion
+    public List<Usuario> sesionUsuario(int idUsuario) {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.idUsuario=:idUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        return query.getResultList();
+    }
+
+    // Consultar usuario por rol
+    public List<Usuario> consultarUsuarioPorRol(int idRol) {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.idRol.idRol=:idRol");
+        query.setParameter("idRol", idRol);
+        return query.getResultList();
+    }
+
 }
