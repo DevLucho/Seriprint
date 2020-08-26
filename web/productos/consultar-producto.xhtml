@@ -40,9 +40,11 @@
         <title>Consultar productos</title>
     </h:head>
     <h:body>
+        <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
+        <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
         <a href="./crear-producto.xhtml">Crear producto</a>
         <h:form>
-        <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
+            <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
         <div class="cards-group">
             <h:form class="row">

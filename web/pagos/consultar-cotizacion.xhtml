@@ -9,14 +9,16 @@
     </h:head>
     <h:body>
         <h:form>
-        <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
+            <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
         <f:view>
+            <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
+            <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
             <h:form>
                 <h1><h:outputText value="List"/></h1>
                 <!-- Si es administrador muestra las que estan en proceso de verificacion -->
                 <c:if test="#{usuarioControlador.user.idRol.idRol==1}">
-                    <h:dataTable value="#{agregarPagoControlador.cotizacionEstado('Verificación de pago')}" var="ca">
+                    <h:dataTable value="#{ordenCompraControlador.cotizacionEstado('Verificación de pago')}" var="ca">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="NumFactura"/>
@@ -51,8 +53,11 @@
                             <f:facet name="header">
                                 <h:outputText value="Fecha de pago"/>
                             </f:facet>
-                            <h:outputText value="#{ca.fecha}">
+                            <h:outputText value="#{ca.fechaCompra}">
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>-
+                            <h:outputText value="#{ca.horaCompra}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
                             </h:outputText>
                         </h:column>
                         <h:column>
@@ -65,13 +70,67 @@
                             <f:facet name="header">
                                 <h:outputText value="Acciones"/>
                             </f:facet>
-                            <h:commandButton value="Validar" action="#{agregarPagoControlador.asignarOperario(ca)}"/>
+                            <h:commandButton value="Validar" action="#{ordenCompraControlador.asignarOperario(ca)}"/>
                             <h:commandButton value="Rechazar"/>
                         </h:column>
                     </h:dataTable>
                 </c:if>
                 <c:if test="#{usuarioControlador.user.idRol.idRol==2}">
-
+                    <h:dataTable value="#{inventarioPedidoControlador.consultarPorAsignado(usuarioControlador.user.idUsuario)}" var="caa">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="NumFactura"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.idCotizacion.numFactura}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cliente"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.idCotizacion.idUsuario.nombres}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Producto"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.idCotizacion.idProducto.nombre}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cantidad"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.idCotizacion.cantidad}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Total a pagar"/>
+                            </f:facet>
+                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(caa.idPedido.idCotizacion.precioCompra)}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha de pago"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.fechaCompra}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>-
+                            <h:outputText value="#{caa.idPedido.horaCompra}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Estado"/>
+                            </f:facet>
+                            <h:outputText value="#{caa.idPedido.idCotizacion.estado}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Acciones"/>
+                            </f:facet>
+                            <h:commandButton value="Confirmar" action="#{ordenCompraControlador.asignarOperario(caa)}"/>
+                        </h:column>
+                    </h:dataTable>
                 </c:if>
                 <!-- Si el usuario en la sesion es cliente muestra sus cotizaciones personales -->
                 <c:if test="#{usuarioControlador.user.idRol.idRol==3}">

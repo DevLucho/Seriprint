@@ -7,6 +7,8 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
+        <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
         <h:form>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
@@ -15,15 +17,16 @@
                 <h1><h:outputText value="Create/Edit"/></h1>
                 <h:panelGrid columns="2">
                     <h:outputLabel value="Abona:" for="abona" />
-                    <h:inputText id="abona" value="#{agregarPagoControlador.agregarPago.abona}" title="Abona" disabled="true"/>
+                    <h:inputText id="abona" value="#{ordenCompraControlador.ordenCompra.abona}" title="Abona" disabled="true"/>
                     <h:outputLabel value="Saldo:" for="saldo" />
-                    <h:inputText id="saldo" value="#{agregarPagoControlador.agregarPago.saldo}" title="Saldo" disabled="true"/>
+                    <h:inputText id="saldo" value="#{ordenCompraControlador.ordenCompra.saldo}" title="Saldo" disabled="true"/>
                     <h:outputLabel value="Observacion:" for="observacion" />
-                    <h:inputText id="observacion" value="#{agregarPagoControlador.agregarPago.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required."/>
+                    <h:inputText id="observacion" value="#{ordenCompraControlador.ordenCompra.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required."/>
                     <h:outputLabel value="Soporte:" for="soporte" />
-                    <h:inputText id="soporte" value="#{agregarPagoControlador.agregarPago.soporte}" title="Soporte" />
+                    <h:inputText id="soporte" value="#{ordenCompraControlador.ordenCompra.soporte}" title="Soporte" />
+                    <h:outputLabel value="IdCotizacion:" for="idCotizacion" />
                 </h:panelGrid>
-                <h:commandButton value="Adjuntar pago" action="#{agregarPagoControlador.registrar(cotizacionControlador.cotizacion)}"/>
+                <h:commandButton value="Adjuntar pago" action="#{ordenCompraControlador.registrar(cotizacionControlador.cotizacion)}"/>
             </h:form>
         </f:view>
         <!-- Sweet Alert -->

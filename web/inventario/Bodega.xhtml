@@ -7,9 +7,9 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
+        <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
         <f:view>
-
-
             <h:form>
                 <h1><h:outputText value="Create/Edit"/></h1>
                 <h:panelGrid columns="2">
@@ -17,7 +17,7 @@
                     <h:inputText id="ubicacion" value="#{bodegaControlador.bodega.ubicacion}" title="Ubicacion" required="true" requiredMessage="The Ubicacion field is required."/>
                     <h:outputLabel value="Capacidadbodega:" for="capacidadbodega" />
                     <h:inputText id="capacidadbodega" value="#{bodegaControlador.bodega.capacidadbodega}" title="Capacidadbodega" required="true" requiredMessage="The Capacidadbodega field is required."/>
-                    
+
                     <h:commandButton action="#{bodegaControlador.crearBodega()}" value="Crear"/>
                 </h:panelGrid>
             </h:form>

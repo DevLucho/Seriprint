@@ -57,6 +57,32 @@ public class InventarioControlador implements Serializable {
         insumo = new Insumo();
         usuario = new Usuario();
         bodega = new Bodega();
+        usuario = new Usuario();
+    }
+
+    public void registar() {
+        inventario.setIdBodega(bodegaFacade.find(bodega.getIdBodega()));
+        inventario.setIdUsuario(usuarioFacade.find(usuario.getIdUsuario()));
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        inventario.setFechaingreso(date);
+        inventario.setEstado("Stock");
+        if (this.opcion == 1) {
+            inventario.setIdProducto(productoFacade.find(producto.getIdProducto()));
+        } else if (this.opcion == 2) {
+            inventario.setIdInsumo(insumoFacade.find(insumo.getIdInsumo()));
+        }
+        inventarioFacade.create(inventario);
+        inventario = new Inventario();
+        producto = new Producto();
+        insumo = new Insumo();
+        usuario = new Usuario();
+        bodega = new Bodega();
+        usuario = new Usuario();
+    }
+
+    public List<Inventario> consultarTodos() {
+        return inventarioFacade.findAll();
     }
 
     public Inventario getInventario() {
@@ -106,24 +132,4 @@ public class InventarioControlador implements Serializable {
     public void setOpcion(int opcion) {
         this.opcion = opcion;
     }
-
-    public void registar() {
-        inventario.setIdBodega(bodegaFacade.find(bodega.getIdBodega()));
-        inventario.setIdUsuario(usuarioFacade.find(usuario.getIdUsuario()));
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        inventario.setFechaingreso(date);
-        if (this.opcion == 1) {
-            inventario.setIdProducto(productoFacade.find(producto.getIdProducto()));
-        } else if (this.opcion == 2) {
-            inventario.setIdInsumo(insumoFacade.find(insumo.getIdInsumo()));
-        }
-        inventarioFacade.create(inventario);
-
-    }
-
-    public List<Inventario> consultarTodos() {
-        return inventarioFacade.findAll();
-    }
-
 }

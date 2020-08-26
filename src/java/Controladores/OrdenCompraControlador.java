@@ -5,10 +5,10 @@
  */
 package Controladores;
 
-import Entidades.AgregarPago;
 import Entidades.Cotizacion;
-import Facade.AgregarPagoFacade;
+import Entidades.OrdenCompra;
 import Facade.CotizacionFacade;
+import Facade.OrdenCompraFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -23,63 +23,64 @@ import javax.inject.Inject;
  *
  * @author Huertas
  */
-@Named(value = "agregarPagoControlador")
+@Named(value = "ordenCompraControlador")
 @SessionScoped
-public class AgregarPagoControlador implements Serializable {
+public class OrdenCompraControlador implements Serializable {
 
     /**
-     * Creates a new instance of AgregarPagoControlador
+     * Creates a new instance of OrdenCompraControlador
      */
     @Inject
     private MensajeControlador mensaje;
-    private AgregarPago agregarPago;
+    private OrdenCompra ordenCompra;
     private Cotizacion cotizacion;
     @EJB
-    AgregarPagoFacade agregarPagoFacade;
+    OrdenCompraFacade ordenCompraFacade;
     @EJB
     CotizacionFacade cotizacionFacade;
 
-    public AgregarPagoControlador() {
+    public OrdenCompraControlador() {
     }
 
     @PostConstruct
     public void init() {
-        agregarPago = new AgregarPago();
+        ordenCompra = new OrdenCompra();
         cotizacion = new Cotizacion();
     }
 
     public void registrar(Cotizacion cotizacion) {
-        agregarPago.setIdCotizacion(cotizacionFacade.find(cotizacion.getIdCotizacion()));
+        ordenCompra.setIdCotizacion(cotizacionFacade.find(cotizacion.getIdCotizacion()));
         // Generar fecha actual al momento del pago
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
-        agregarPago.setFecha(date);
-        agregarPagoFacade.create(agregarPago);
+        Date time = cal.getTime();
+        ordenCompra.setFechaCompra(date);
+        ordenCompra.setHoraCompra(time);
+        ordenCompraFacade.create(ordenCompra);
         this.cotizacion = cotizacion;
         cotizacion.setEstado("Verificación de pago");
         cotizacionFacade.edit(cotizacion);
-        this.agregarPago = new AgregarPago();
+        this.ordenCompra = new OrdenCompra();
         this.cotizacion = new Cotizacion();
         mensaje.setMensaje("MensajeRedirect('./consultar-cotizacion.xhtml','Pago agregado!','Recuerda que tu cotización pasara a estado de verificación por parte del Administrador. Seras notificado cuando se apruebe','success');");
-
     }
-    
-    public String asignarOperario(AgregarPago agregarPagos){
-        cotizacion = agregarPagos.getIdCotizacion();
-        agregarPago = agregarPagos;
+
+    public String asignarOperario(OrdenCompra ordenCompras) {
+        cotizacion = ordenCompras.getIdCotizacion();
+        ordenCompra = ordenCompras;
         return "detalle-pago";
     }
 
-    public List<AgregarPago> cotizacionEstado(String estado) {
-        return agregarPagoFacade.cotizacionEstado(estado);
+    public List<OrdenCompra> cotizacionEstado(String estado) {
+        return ordenCompraFacade.cotizacionEstado(estado);
     }
 
-    public AgregarPago getAgregarPago() {
-        return agregarPago;
+    public OrdenCompra getOrdenCompra() {
+        return ordenCompra;
     }
 
-    public void setAgregarPago(AgregarPago agregarPago) {
-        this.agregarPago = agregarPago;
+    public void setOrdenCompra(OrdenCompra ordenCompra) {
+        this.ordenCompra = ordenCompra;
     }
 
     public Cotizacion getCotizacion() {

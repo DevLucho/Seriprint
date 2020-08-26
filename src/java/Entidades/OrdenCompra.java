@@ -34,17 +34,20 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Huertas
  */
 @Entity
-@Table(name = "agregar_pago")
+@Table(name = "orden_compra")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AgregarPago.findAll", query = "SELECT a FROM AgregarPago a")
-    , @NamedQuery(name = "AgregarPago.findByIdPedido", query = "SELECT a FROM AgregarPago a WHERE a.idPedido = :idPedido")
-    , @NamedQuery(name = "AgregarPago.findByAbona", query = "SELECT a FROM AgregarPago a WHERE a.abona = :abona")
-    , @NamedQuery(name = "AgregarPago.findBySaldo", query = "SELECT a FROM AgregarPago a WHERE a.saldo = :saldo")
-    , @NamedQuery(name = "AgregarPago.findByObservacion", query = "SELECT a FROM AgregarPago a WHERE a.observacion = :observacion")
-    , @NamedQuery(name = "AgregarPago.findByFecha", query = "SELECT a FROM AgregarPago a WHERE a.fecha = :fecha")
-    , @NamedQuery(name = "AgregarPago.findBySoporte", query = "SELECT a FROM AgregarPago a WHERE a.soporte = :soporte")})
-public class AgregarPago implements Serializable {
+    @NamedQuery(name = "OrdenCompra.findAll", query = "SELECT o FROM OrdenCompra o")
+    , @NamedQuery(name = "OrdenCompra.findByIdPedido", query = "SELECT o FROM OrdenCompra o WHERE o.idPedido = :idPedido")
+    , @NamedQuery(name = "OrdenCompra.findByAbona", query = "SELECT o FROM OrdenCompra o WHERE o.abona = :abona")
+    , @NamedQuery(name = "OrdenCompra.findBySaldo", query = "SELECT o FROM OrdenCompra o WHERE o.saldo = :saldo")
+    , @NamedQuery(name = "OrdenCompra.findByObservacion", query = "SELECT o FROM OrdenCompra o WHERE o.observacion = :observacion")
+    , @NamedQuery(name = "OrdenCompra.findByFechaCompra", query = "SELECT o FROM OrdenCompra o WHERE o.fechaCompra = :fechaCompra")
+    , @NamedQuery(name = "OrdenCompra.findByHoraCompra", query = "SELECT o FROM OrdenCompra o WHERE o.horaCompra = :horaCompra")
+    , @NamedQuery(name = "OrdenCompra.findByFechaEntrega", query = "SELECT o FROM OrdenCompra o WHERE o.fechaEntrega = :fechaEntrega")
+    , @NamedQuery(name = "OrdenCompra.findByHoraEntrega", query = "SELECT o FROM OrdenCompra o WHERE o.horaEntrega = :horaEntrega")
+    , @NamedQuery(name = "OrdenCompra.findBySoporte", query = "SELECT o FROM OrdenCompra o WHERE o.soporte = :soporte")})
+public class OrdenCompra implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -64,9 +67,20 @@ public class AgregarPago implements Serializable {
     private String observacion;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Fecha")
+    @Column(name = "FechaCompra")
     @Temporal(TemporalType.DATE)
-    private Date fecha;
+    private Date fechaCompra;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "horaCompra")
+    @Temporal(TemporalType.TIME)
+    private Date horaCompra;
+    @Column(name = "fechaEntrega")
+    @Temporal(TemporalType.DATE)
+    private Date fechaEntrega;
+    @Column(name = "horaEntrega")
+    @Temporal(TemporalType.TIME)
+    private Date horaEntrega;
     @Size(max = 100)
     @Column(name = "Soporte")
     private String soporte;
@@ -74,19 +88,20 @@ public class AgregarPago implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cotizacion idCotizacion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido", fetch = FetchType.LAZY)
-    private List<Solicitud> solicitudList;
+    private List<InventarioPedido> inventarioPedidoList;
 
-    public AgregarPago() {
+    public OrdenCompra() {
     }
 
-    public AgregarPago(Integer idPedido) {
+    public OrdenCompra(Integer idPedido) {
         this.idPedido = idPedido;
     }
 
-    public AgregarPago(Integer idPedido, String observacion, Date fecha) {
+    public OrdenCompra(Integer idPedido, String observacion, Date fechaCompra, Date horaCompra) {
         this.idPedido = idPedido;
         this.observacion = observacion;
-        this.fecha = fecha;
+        this.fechaCompra = fechaCompra;
+        this.horaCompra = horaCompra;
     }
 
     public Integer getIdPedido() {
@@ -121,12 +136,36 @@ public class AgregarPago implements Serializable {
         this.observacion = observacion;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaCompra() {
+        return fechaCompra;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaCompra(Date fechaCompra) {
+        this.fechaCompra = fechaCompra;
+    }
+
+    public Date getHoraCompra() {
+        return horaCompra;
+    }
+
+    public void setHoraCompra(Date horaCompra) {
+        this.horaCompra = horaCompra;
+    }
+
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
+
+    public Date getHoraEntrega() {
+        return horaEntrega;
+    }
+
+    public void setHoraEntrega(Date horaEntrega) {
+        this.horaEntrega = horaEntrega;
     }
 
     public String getSoporte() {
@@ -146,12 +185,12 @@ public class AgregarPago implements Serializable {
     }
 
     @XmlTransient
-    public List<Solicitud> getSolicitudList() {
-        return solicitudList;
+    public List<InventarioPedido> getInventarioPedidoList() {
+        return inventarioPedidoList;
     }
 
-    public void setSolicitudList(List<Solicitud> solicitudList) {
-        this.solicitudList = solicitudList;
+    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
+        this.inventarioPedidoList = inventarioPedidoList;
     }
 
     @Override
@@ -164,10 +203,10 @@ public class AgregarPago implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AgregarPago)) {
+        if (!(object instanceof OrdenCompra)) {
             return false;
         }
-        AgregarPago other = (AgregarPago) object;
+        OrdenCompra other = (OrdenCompra) object;
         if ((this.idPedido == null && other.idPedido != null) || (this.idPedido != null && !this.idPedido.equals(other.idPedido))) {
             return false;
         }
@@ -176,7 +215,7 @@ public class AgregarPago implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidades.AgregarPago[ idPedido=" + idPedido + " ]";
+        return "Entidades.OrdenCompra[ idPedido=" + idPedido + " ]";
     }
     
 }

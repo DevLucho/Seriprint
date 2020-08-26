@@ -5,17 +5,19 @@
  */
 package Facade;
 
-import Entidades.Solicitud;
+import Entidades.InventarioPedido;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
  * @author Huertas
  */
 @Stateless
-public class SolicitudFacade extends AbstractFacade<Solicitud> {
+public class InventarioPedidoFacade extends AbstractFacade<InventarioPedido> {
 
     @PersistenceContext(unitName = "SeriprintPU")
     private EntityManager em;
@@ -25,8 +27,14 @@ public class SolicitudFacade extends AbstractFacade<Solicitud> {
         return em;
     }
 
-    public SolicitudFacade() {
-        super(Solicitud.class);
+    public InventarioPedidoFacade() {
+        super(InventarioPedido.class);
     }
-    
+
+    public List<InventarioPedido> consultarPorAsignado(int idUsuario) {
+        Query query = em.createQuery("SELECT u FROM InventarioPedido u WHERE u.idUsuario.idUsuario=:idUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        return query.getResultList();
+    }
+
 }

@@ -88,7 +88,7 @@ public class Cotizacion implements Serializable {
     @Column(name = "Estado")
     private String estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCotizacion", fetch = FetchType.LAZY)
-    private List<AgregarPago> agregarPagoList;
+    private List<OrdenCompra> ordenCompraList;
     @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto idProducto;
@@ -185,12 +185,12 @@ public class Cotizacion implements Serializable {
     }
 
     @XmlTransient
-    public List<AgregarPago> getAgregarPagoList() {
-        return agregarPagoList;
+    public List<OrdenCompra> getOrdenCompraList() {
+        return ordenCompraList;
     }
 
-    public void setAgregarPagoList(List<AgregarPago> agregarPagoList) {
-        this.agregarPagoList = agregarPagoList;
+    public void setOrdenCompraList(List<OrdenCompra> ordenCompraList) {
+        this.ordenCompraList = ordenCompraList;
     }
 
     public Producto getIdProducto() {

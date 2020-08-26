@@ -6,17 +6,21 @@
 package Entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,30 +28,37 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Huertas
  */
 @Entity
-@Table(name = "inventario-solicitud")
+@Table(name = "inventario_pedido")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "InventarioSolicitud.findAll", query = "SELECT i FROM InventarioSolicitud i")
-    , @NamedQuery(name = "InventarioSolicitud.findByIdInvenSoli", query = "SELECT i FROM InventarioSolicitud i WHERE i.idInvenSoli = :idInvenSoli")})
-public class InventarioSolicitud implements Serializable {
+    @NamedQuery(name = "InventarioPedido.findAll", query = "SELECT i FROM InventarioPedido i")
+    , @NamedQuery(name = "InventarioPedido.findByIdInvenSoli", query = "SELECT i FROM InventarioPedido i WHERE i.idInvenSoli = :idInvenSoli")
+    , @NamedQuery(name = "InventarioPedido.findByFechaSalida", query = "SELECT i FROM InventarioPedido i WHERE i.fechaSalida = :fechaSalida")})
+public class InventarioPedido implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idInvenSoli")
     private Integer idInvenSoli;
+    @Column(name = "fechaSalida")
+    @Temporal(TemporalType.DATE)
+    private Date fechaSalida;
     @JoinColumn(name = "idInventario", referencedColumnName = "idInventario")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Inventario idInventario;
-    @JoinColumn(name = "idSolicitud", referencedColumnName = "idSolicitud")
+    @JoinColumn(name = "idPedido", referencedColumnName = "idPedido")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Solicitud idSolicitud;
+    private OrdenCompra idPedido;
+    @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Usuario idUsuario;
 
-    public InventarioSolicitud() {
+    public InventarioPedido() {
     }
 
-    public InventarioSolicitud(Integer idInvenSoli) {
+    public InventarioPedido(Integer idInvenSoli) {
         this.idInvenSoli = idInvenSoli;
     }
 
@@ -59,6 +70,14 @@ public class InventarioSolicitud implements Serializable {
         this.idInvenSoli = idInvenSoli;
     }
 
+    public Date getFechaSalida() {
+        return fechaSalida;
+    }
+
+    public void setFechaSalida(Date fechaSalida) {
+        this.fechaSalida = fechaSalida;
+    }
+
     public Inventario getIdInventario() {
         return idInventario;
     }
@@ -67,12 +86,20 @@ public class InventarioSolicitud implements Serializable {
         this.idInventario = idInventario;
     }
 
-    public Solicitud getIdSolicitud() {
-        return idSolicitud;
+    public OrdenCompra getIdPedido() {
+        return idPedido;
     }
 
-    public void setIdSolicitud(Solicitud idSolicitud) {
-        this.idSolicitud = idSolicitud;
+    public void setIdPedido(OrdenCompra idPedido) {
+        this.idPedido = idPedido;
+    }
+
+    public Usuario getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Usuario idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Override
@@ -85,10 +112,10 @@ public class InventarioSolicitud implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof InventarioSolicitud)) {
+        if (!(object instanceof InventarioPedido)) {
             return false;
         }
-        InventarioSolicitud other = (InventarioSolicitud) object;
+        InventarioPedido other = (InventarioPedido) object;
         if ((this.idInvenSoli == null && other.idInvenSoli != null) || (this.idInvenSoli != null && !this.idInvenSoli.equals(other.idInvenSoli))) {
             return false;
         }
@@ -97,7 +124,7 @@ public class InventarioSolicitud implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidades.InventarioSolicitud[ idInvenSoli=" + idInvenSoli + " ]";
+        return "Entidades.InventarioPedido[ idInvenSoli=" + idInvenSoli + " ]";
     }
     
 }

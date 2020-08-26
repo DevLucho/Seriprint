@@ -5,7 +5,7 @@
  */
 package Facade;
 
-import Entidades.AgregarPago;
+import Entidades.OrdenCompra;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author Huertas
  */
 @Stateless
-public class AgregarPagoFacade extends AbstractFacade<AgregarPago> {
+public class OrdenCompraFacade extends AbstractFacade<OrdenCompra> {
 
     @PersistenceContext(unitName = "SeriprintPU")
     private EntityManager em;
@@ -27,12 +27,12 @@ public class AgregarPagoFacade extends AbstractFacade<AgregarPago> {
         return em;
     }
 
-    public AgregarPagoFacade() {
-        super(AgregarPago.class);
+    public OrdenCompraFacade() {
+        super(OrdenCompra.class);
     }
 
-    public List<AgregarPago> cotizacionEstado(String estado) {
-        Query query = em.createQuery("SELECT u FROM AgregarPago u WHERE u.idCotizacion.estado=:estado");
+    public List<OrdenCompra> cotizacionEstado(String estado) {
+        Query query = em.createQuery("SELECT u FROM OrdenCompra u WHERE u.idCotizacion.estado=:estado");
         query.setParameter("estado", estado);
         return query.getResultList();
     }

@@ -95,7 +95,7 @@ public class UsuarioControlador implements Serializable {
                     return "/pagos/consultar-cotizacion?faces-redirect=true";
                 }
                 if (rolSeleccionado.getIdRol() == 2) {
-                    return "";
+                    return "/pagos/consultar-cotizacion?faces-redirect=true";
                 }
                 // Si es cliente:
                 return "/productos/consultar-producto?faces-redirect=true";

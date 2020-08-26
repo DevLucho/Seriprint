@@ -54,54 +54,62 @@
 
             <h:form>
                 <h1><h:outputText value="List"/></h1>
-                <h:dataTable value="#{inventarioControlador.consultarTodos()}" var="item">
+                <h:dataTable value="#{inventarioControlador.consultarTodos()}" var="i">
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="IdInventario"/>
                         </f:facet>
-                        <h:outputText value="#{item.idInventario}"/>
+                        <h:outputText value="#{i.idInventario}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Fechaingreso"/>
                         </f:facet>
-                        <h:outputText value="#{item.fechaingreso}">
+                        <h:outputText value="#{i.fechaingreso}">
                             <f:convertDateTime pattern="MM/dd/yyyy" />
                         </h:outputText>
                     </h:column>
+                    <!--
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Fechasalida"/>
                         </f:facet>
-                        <h:outputText value="#{item.fechasalida}">
+                        <h:outputText value="#{i.fechasalida}">
                             <f:convertDateTime pattern="MM/dd/yyyy" />
                         </h:outputText>
                     </h:column>
+                    -->
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Responsable"/>
                         </f:facet>
-                        <h:outputText value="#{item.idUsuario.nombres}"/>
+                        <h:outputText value="#{i.idUsuario.nombres}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="IdBodega"/>
                         </f:facet>
-                        <h:outputText value="#{item.idBodega.ubicacion}"/>
+                        <h:outputText value="#{i.idBodega.ubicacion}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Articulo"/>
                         </f:facet>
-                        <h:outputText value="#{item.idProducto.nombre}"/>
-                        <h:outputText value="#{item.idInsumo.nombre}"/>
+                        <h:outputText value="#{i.idProducto.nombre}"/>
+                        <h:outputText value="#{i.idInsumo.nombre}"/>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="Cantidad"/>
                         </f:facet>
-                        <h:outputText value="#{item.idProducto.cantidad}"/>
-                        <h:outputText value="#{item.idInsumo.cantidad}"/>
+                        <h:outputText value="#{i.idProducto.cantidad}"/>
+                        <h:outputText value="#{i.idInsumo.cantidad}"/>
+                    </h:column>
+                     <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Estado"/>
+                        </f:facet>
+                         <h:outputText value="#{i.estado}"/>
                     </h:column>
                 </h:dataTable>
             </h:form>

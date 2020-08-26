@@ -26,42 +26,46 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
+        <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
+        <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
         <h:form>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
         <f:view>
             <h:form>
-                <h1><h:outputText value="Detalle pago cliente"/></h1>
-                <!--
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="Abona:" for="abona" />
-                    <h:inputText id="abona" value="#{agregarPagoControlador.agregarPago.abona}" title="Abona"/>
-                    <h:outputLabel value="Saldo:" for="saldo" />
-                    <h:inputText id="saldo" value="#{agregarPagoControlador.agregarPago.saldo}" title="Saldo" disabled="true"/>
-                    <h:outputLabel value="Observacion:" for="observacion" />
-                    <h:inputTextarea id="observacion" value="#{agregarPagoControlador.agregarPago.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required." disabled="true"/>
-                </h:panelGrid>
-                -->
-                <h:selectBooleanCheckbox value="#{solicitudControlador.checked}" onchange="submit();"/>Asignar cotizacion a operario<br/>
-                <c:if test="#{solicitudControlador.checked=='true'}">
+                <h:outputLabel value="Abona:" for="abona" />
+                <h:inputText id="abona" value="#{ordenCompraControlador.ordenCompra.abona}" title="Abona"/>
+                <br/>
+                <h:outputLabel value="Saldo:" for="saldo" />
+                <h:inputText id="saldo" value="#{ordenCompraControlador.ordenCompra.saldo}" title="Saldo" disabled="true"/>
+                <br/>
+                <h:outputLabel value="Observacion:" for="observacion" />
+                <h:inputText id="observacion" value="#{ordenCompraControlador.ordenCompra.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required."/>
+                <br/>
+                <h:outputLabel value="Soporte:" for="soporte" />
+                <h:inputText id="soporte" value="#{ordenCompraControlador.ordenCompra.soporte}" title="Soporte" />
+                <br/>
+                <h:selectBooleanCheckbox value="#{inventarioPedidoControlador.checked}" onchange="submit();"/>Asignar cotizacion a operario<br/>
+                <br/>
+                <c:if test="#{inventarioPedidoControlador.checked=='true'}">
                     <h:outputLabel value="Operario:" for="idUsuario" />
-                    <h:selectOneMenu id="idUsuario" value="#{solicitudControlador.usuario.idUsuario}" title="IdUsuario">
+                    <h:selectOneMenu id="idUsuario" value="#{inventarioPedidoControlador.usuario.idUsuario}" title="IdUsuario">
                         <f:selectItems value="#{usuarioControlador.consultarUsuarioPorRol(2)}" var="ur" itemValue="#{ur.idUsuario}" itemLabel="#{ur.nombres} #{ur.apellidos}"/>
                     </h:selectOneMenu><br/>
+                    <br/>
                     <h:outputLabel value="IdPedido:" for="idPedido" />
-                    <h:selectOneMenu id="idPedido" value="#{solicitudControlador.agregarPago.idPedido}" title="IdPedido" >
-                        <f:selectItem itemValue="#{agregarPagoControlador.agregarPago.idPedido}" itemLabel="#{agregarPagoControlador.agregarPago.idCotizacion.numFactura}"/>
+                    <h:selectOneMenu id="idPedido" value="#{inventarioPedidoControlador.ordenCompra.idPedido}" title="IdPedido" >
+                        <f:selectItem itemValue="#{ordenCompraControlador.ordenCompra.idPedido}" itemLabel="#{ordenCompraControlador.cotizacion.numFactura}"/>
                     </h:selectOneMenu>
+                    <br/>
                 </c:if>
-                <br/>
-                <h:commandButton value="Registrar" action="#{solicitudControlador.registrar(agregarPagoControlador.agregarPago)}"></h:commandButton>
-
-                <h:outputLabel value="Soporte:" for="soporte" />
-                <main>
-                    <iframe name="principal" src="../docs/Formato-IEEE830.pdf"></iframe>
-                </main>
+                <h:commandButton value="Registrar" action="#{inventarioPedidoControlador.registrar(ordenCompraControlador.cotizacion)}"></h:commandButton>
             </h:form>
         </f:view>
+        <h:outputLabel value="Soporte:" for="soporte" /><br/>
+        <main>
+            <iframe name="principal" src="../docs/Formato-IEEE830.pdf"></iframe>
+        </main>
         <!-- Sweet Alert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
         <script src="../js/alertas.js" type="text/javascript"></script>

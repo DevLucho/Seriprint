@@ -41,8 +41,6 @@ public class CotizacionControlador implements Serializable {
      * Creates a new instance of CotizacionControlador
      */
     @Inject
-    ProductoControlador productoD;
-    @Inject
     private MensajeControlador mensaje;
     private Cotizacion cotizacion;
     private Usuario usuario;

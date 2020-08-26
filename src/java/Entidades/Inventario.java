@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,7 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Inventario.findAll", query = "SELECT i FROM Inventario i")
     , @NamedQuery(name = "Inventario.findByIdInventario", query = "SELECT i FROM Inventario i WHERE i.idInventario = :idInventario")
     , @NamedQuery(name = "Inventario.findByFechaingreso", query = "SELECT i FROM Inventario i WHERE i.fechaingreso = :fechaingreso")
-    , @NamedQuery(name = "Inventario.findByFechasalida", query = "SELECT i FROM Inventario i WHERE i.fechasalida = :fechasalida")
     , @NamedQuery(name = "Inventario.findByEstado", query = "SELECT i FROM Inventario i WHERE i.estado = :estado")})
 public class Inventario implements Serializable {
 
@@ -55,14 +53,13 @@ public class Inventario implements Serializable {
     @Column(name = "Fecha_ingreso")
     @Temporal(TemporalType.DATE)
     private Date fechaingreso;
-    @Column(name = "Fecha_salida")
-    @Temporal(TemporalType.DATE)
-    private Date fechasalida;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 9)
     @Column(name = "estado")
     private String estado;
+    @OneToMany(mappedBy = "idInventario", fetch = FetchType.LAZY)
+    private List<InventarioPedido> inventarioPedidoList;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
@@ -75,8 +72,6 @@ public class Inventario implements Serializable {
     @JoinColumn(name = "idInsumo", referencedColumnName = "idInsumo")
     @ManyToOne(fetch = FetchType.LAZY)
     private Insumo idInsumo;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInventario", fetch = FetchType.LAZY)
-    private List<InventarioSolicitud> inventarioSolicitudList;
 
     public Inventario() {
     }
@@ -107,20 +102,21 @@ public class Inventario implements Serializable {
         this.fechaingreso = fechaingreso;
     }
 
-    public Date getFechasalida() {
-        return fechasalida;
-    }
-
-    public void setFechasalida(Date fechasalida) {
-        this.fechasalida = fechasalida;
-    }
-
     public String getEstado() {
         return estado;
     }
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @XmlTransient
+    public List<InventarioPedido> getInventarioPedidoList() {
+        return inventarioPedidoList;
+    }
+
+    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
+        this.inventarioPedidoList = inventarioPedidoList;
     }
 
     public Usuario getIdUsuario() {
@@ -153,15 +149,6 @@ public class Inventario implements Serializable {
 
     public void setIdInsumo(Insumo idInsumo) {
         this.idInsumo = idInsumo;
-    }
-
-    @XmlTransient
-    public List<InventarioSolicitud> getInventarioSolicitudList() {
-        return inventarioSolicitudList;
-    }
-
-    public void setInventarioSolicitudList(List<InventarioSolicitud> inventarioSolicitudList) {
-        this.inventarioSolicitudList = inventarioSolicitudList;
     }
 
     @Override

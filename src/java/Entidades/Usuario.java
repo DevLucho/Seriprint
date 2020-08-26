@@ -105,7 +105,7 @@ public class Usuario implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Cotizacion> cotizacionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<Solicitud> solicitudList;
+    private List<InventarioPedido> inventarioPedidoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Inventario> inventarioList;
 
@@ -227,12 +227,12 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Solicitud> getSolicitudList() {
-        return solicitudList;
+    public List<InventarioPedido> getInventarioPedidoList() {
+        return inventarioPedidoList;
     }
 
-    public void setSolicitudList(List<Solicitud> solicitudList) {
-        this.solicitudList = solicitudList;
+    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
+        this.inventarioPedidoList = inventarioPedidoList;
     }
 
     @XmlTransient
