@@ -80,7 +80,7 @@ public class InventarioPedidoControlador implements Serializable {
             cotizacionFacade.edit(cotizacion);
             mensaje.setMensaje("MensajeRedirect('./consultar-cotizacion.xhtml','Se ha asignado la cotizacion al operario!','El estado de este a pasado a Asignada, por lo que pasara a producción.','success');");
         } else {
-            ordenCompraFacade.edit(ordenCompra);
+            //ordenCompraFacade.edit(ordenCompra);
             mensaje.setMensaje("Mensaje3('Exito!','Se ha agregado el abono del cliente.','success');");
         }
         this.cotizacion = new Cotizacion();

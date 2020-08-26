@@ -137,8 +137,8 @@ public class CotizacionControlador implements Serializable {
     }
 
     public void cancelar(Cotizacion cotizacionCancelar) {
-        if ("Cancelado".equals(cotizacionCancelar.getEstado())) {
-            mensaje.setMensaje("Mensaje3('Atención!','La cotización #" + cotizacionCancelar.getNumFactura() + " ya ha sido cancelada.','error');");
+        if ("Cancelado".equals(cotizacionCancelar.getEstado()) || "Entregado".equals(cotizacionCancelar.getEstado())) {
+            mensaje.setMensaje("Mensaje3('Atención!','La cotización #" + cotizacionCancelar.getNumFactura() + " ya ha sido "+cotizacionCancelar.getEstado()+"','error');");
         } else {
             cotizacion = cotizacionCancelar;
             cotizacion.setEstado("Cancelado");

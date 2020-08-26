@@ -15,7 +15,7 @@
             <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
             <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
             <h:form>
-                <h1><h:outputText value="List"/></h1>
+                <h1><h:outputText value="Consulta de cotizaciones"/></h1>
                 <!-- Si es administrador muestra las que estan en proceso de verificacion -->
                 <c:if test="#{usuarioControlador.user.idRol.idRol==1}">
                     <h:dataTable value="#{ordenCompraControlador.cotizacionEstado('Verificación de pago')}" var="ca">

@@ -91,9 +91,11 @@ public class UsuarioControlador implements Serializable {
             rolSeleccionado = user.getIdRol();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogueado", user);
             if ("Activo".equals(user.getEstado())) {
+                // Si es administrador
                 if (rolSeleccionado.getIdRol() == 1) {
                     return "/pagos/consultar-cotizacion?faces-redirect=true";
                 }
+                // Si es operario
                 if (rolSeleccionado.getIdRol() == 2) {
                     return "/pagos/consultar-cotizacion?faces-redirect=true";
                 }

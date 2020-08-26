@@ -54,6 +54,12 @@
                         <div class="card-body">
                             <h5 class="card-title">#{p.nombre}</h5>
                             <p class="card-text">#{p.descripcion}</p>
+                            <c:if test="#{p.descuento==null}">
+                                <p class="color:red;">No aplican descuentos</p>
+                            </c:if>
+                            <c:if test="#{p.descuento!=null}">
+                                <p class="color:green;">Aplica descuento del: #{p.descuento}</p>
+                            </c:if>
                             <h:commandButton class="btn btn-primary d-flex justify-content-center " value="Ver detalle" action="#{productoControlador.detalleProducto(p)}"></h:commandButton>
                         </div>
                     </div>

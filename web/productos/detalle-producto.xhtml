@@ -12,6 +12,7 @@
     </h:head>
     <h:body>
         <h:form>
+            <a href="consultar-producto.xhtml">Consultar producto</a>
             <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
             <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>

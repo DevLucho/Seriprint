@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 
 /**
  *
@@ -19,8 +20,11 @@ import javax.enterprise.context.SessionScoped;
 @SessionScoped
 public class ProductoControlador implements Serializable {
 
+    @Inject
+    private MensajeControlador mensaje;
     private Producto producto;
     private TipoDeProducto tipoDeProducto;
+    private boolean checkdesc;
     @EJB
     ProductoFacade productoFacade;
     @EJB
@@ -29,13 +33,28 @@ public class ProductoControlador implements Serializable {
     public ProductoControlador() {
         tipoDeProducto = new TipoDeProducto();
         producto = new Producto();
+        checkdesc = false;
     }
 
     public void registrar() {
         producto.setIdTipoproducto(tipoDeProductoFacade.find(tipoDeProducto.getIdTipoproducto()));
+        //descuento(producto);
         productoFacade.create(producto);
+        /*
+        if(checkdesc){
+            
+        }
+         */
+        mensaje.setMensaje("MensajeRedirect('./consultar-producto.xhtml','Producto creado','Se ha creado satisfactoriamente el producto " + producto.getNombre() + "','success');");
         producto = new Producto();
         tipoDeProducto = new TipoDeProducto();
+    }
+
+    public void descuento(Producto producto) {
+        double precioTotal;
+        this.producto = producto;
+        precioTotal = ((producto.getPreciounidad() % producto.getDescuento()) * 100);
+        producto.setPrecioventa(precioTotal);
     }
 
     public String preactualizar(Producto productoActualizar) {
@@ -85,4 +104,13 @@ public class ProductoControlador implements Serializable {
     public void setTipoDeProducto(TipoDeProducto tipoDeProducto) {
         this.tipoDeProducto = tipoDeProducto;
     }
+
+    public boolean isCheckdesc() {
+        return checkdesc;
+    }
+
+    public void setCheckdesc(boolean checkdesc) {
+        this.checkdesc = checkdesc;
+    }
+
 }
