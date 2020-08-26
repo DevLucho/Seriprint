@@ -128,7 +128,8 @@
                             <f:facet name="header">
                                 <h:outputText value="Acciones"/>
                             </f:facet>
-                            <h:commandButton value="Confirmar" action="#{ordenCompraControlador.asignarOperario(caa)}"/>
+                            <h:commandButton value="Notificar entrega" action="#{inventarioPedidoControlador.notificarEntrega(caa.idPedido)}"/>
+                            <h:commandButton value="Proceso de produccion" action="#{inventarioPedidoControlador.cambiarEstado(caa.idPedido)}"/>
                         </h:column>
                     </h:dataTable>
                 </c:if>

@@ -18,6 +18,8 @@ import Facade.UsuarioFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -40,7 +42,7 @@ public class InventarioPedidoControlador implements Serializable {
     private InventarioPedido inventarioPedido;
     private Cotizacion cotizacion;
     private Usuario usuario;
-    Inventario inventario;
+    private Inventario inventario;
     private boolean checked;
 
     @EJB
@@ -67,6 +69,7 @@ public class InventarioPedidoControlador implements Serializable {
         checked = false;
     }
 
+    // Asignar operario a cotizacion
     public void registrar(Cotizacion cotizacion) {
         if (checked) {
             inventarioPedido.setIdPedido(ordenCompraFacade.find(ordenCompra.getIdPedido()));
@@ -87,12 +90,64 @@ public class InventarioPedidoControlador implements Serializable {
         inventario = new Inventario();
         checked = false;
     }
-    
-    //Consultar por operario asignado
-    public List<InventarioPedido> consultarPorAsignado(int idUsuario){
-        return inventarioPedidoFacade.consultarPorAsignado(idUsuario);
+
+    // Metodo para validar si esta en stock el producto cotizado por el cliente
+    public void validarProductoStock() {
+        int cantidad;
+        List<Inventario> productos;
+        productos = invetarioFacade.findAll();
+        int productoInvetario = inventario.getIdProducto().getIdProducto();
+        int productoCotizacion = inventarioPedido.getIdPedido().getIdCotizacion().getIdProducto().getIdProducto();
+
+        for (int i = 0; i < productos.size(); i++) {
+            if (productoInvetario == productoCotizacion) {
+                int cantidadCotizacion = inventarioPedido.getIdPedido().getIdCotizacion().getCantidad();
+                int cantidadProducto = inventario.getIdProducto().getCantidad();
+                if (cantidadCotizacion >= cantidadProducto) {
+                    cantidad = (cantidadCotizacion - cantidadProducto);
+                } else {
+                    cantidad = (cantidadProducto - cantidadCotizacion);
+                }
+            }
+
+        }
     }
     
+    // Cambiar pedido a estado de produccion
+    public void cambiarEstado(OrdenCompra ordenCompra) {
+        cotizacion = ordenCompra.getIdCotizacion();
+        cotizacion.setEstado("Proceso de producción");
+        cotizacionFacade.edit(cotizacion);
+    }
+    
+    // Metodo para generar fechas de salida y notificar el pedido
+    public void notificarEntrega(OrdenCompra ordenCompra) {
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        Date time = cal.getTime();
+        /*
+        inventarioPedido.setFechaSalida(time);
+        inventarioPedidoFacade.edit(inventarioPedido);
+         */
+        this.ordenCompra = ordenCompra;
+        this.ordenCompra.setFechaEntrega(date);
+        this.ordenCompra.setHoraEntrega(time);
+        ordenCompraFacade.edit(this.ordenCompra);
+        cotizacion = ordenCompra.getIdCotizacion();
+        if (!"Entregado".equals(cotizacion.getEstado())) {
+            cotizacion.setEstado("Entregado");
+            cotizacionFacade.edit(cotizacion);
+            mensaje.setMensaje("Mensaje3('Exito','Se ha notificado satisfactoriamente la compra.','warning');");
+        } else {
+            mensaje.setMensaje("Mensaje3('Atención','Esta cotizacion ya ha sido entregada','warning');");
+        }
+    }
+
+    //Consultar por operario asignado
+    public List<InventarioPedido> consultarPorAsignado(int idUsuario) {
+        return inventarioPedidoFacade.consultarPorAsignado(idUsuario);
+    }
+
     // Metodos get y set
     public OrdenCompra getOrdenCompra() {
         return ordenCompra;
@@ -132,6 +187,14 @@ public class InventarioPedidoControlador implements Serializable {
 
     public void setCotizacion(Cotizacion cotizacion) {
         this.cotizacion = cotizacion;
+    }
+
+    public Inventario getInventario() {
+        return inventario;
+    }
+
+    public void setInventario(Inventario inventario) {
+        this.inventario = inventario;
     }
 
 }

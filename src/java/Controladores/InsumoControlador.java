@@ -29,7 +29,7 @@ public class InsumoControlador implements Serializable {
     InsumoFacade insumoFacade;
     @EJB
     TipoDeInsumoFacade tipoDeInsumoFacade;
-    
+
     public InsumoControlador() {
         tipoDeInsumo = new TipoDeInsumo();
         insumo = new Insumo();
@@ -50,28 +50,32 @@ public class InsumoControlador implements Serializable {
     public void setTipoDeInsumo(TipoDeInsumo tipoDeInsumo) {
         this.tipoDeInsumo = tipoDeInsumo;
     }
-    /*
-    public void registrar(){
+
+    public void registrar() {
         insumo.setIdTipoinsumo(tipoDeInsumoFacade.find(tipoDeInsumo.getIdTipoinsumo()));
         insumoFacade.create(insumo);
         tipoDeInsumo = new TipoDeInsumo();
         insumo = new Insumo();
-    }*/
-    public String preactualizar(Insumo insumoActualizar){
+    }
+
+    public String preactualizar(Insumo insumoActualizar) {
         tipoDeInsumo = insumoActualizar.getIdTipoinsumo();
         insumo = insumoActualizar;
         return "editarInsumo";
     }
-    public String actualizar(){
+
+    public String actualizar() {
         insumo.setIdTipoinsumo(tipoDeInsumoFacade.find(tipoDeInsumo.getIdTipoinsumo()));
         insumoFacade.edit(insumo);
         return "Insumo";
     }
-    public void eliminar(Insumo insumo){
+
+    public void eliminar(Insumo insumo) {
         this.insumo = insumo;
         insumoFacade.remove(insumoFacade.find(insumo.getIdInsumo()));
     }
-    public List<Insumo> consultarTodos(){
+
+    public List<Insumo> consultarTodos() {
         return insumoFacade.findAll();
     }
 }

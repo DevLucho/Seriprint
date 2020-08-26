@@ -74,9 +74,8 @@ public class Producto implements Serializable {
     private Double precioventa;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 500)
     @Column(name = "Cantidad")
-    private String cantidad;
+    private int cantidad;
     @Column(name = "Descuento")
     private Double descuento;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
@@ -94,7 +93,7 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Producto(Integer idProducto, String nombre, String descripcion, String imagen, double preciounidad, String cantidad) {
+    public Producto(Integer idProducto, String nombre, String descripcion, String imagen, double preciounidad, int cantidad) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -151,11 +150,11 @@ public class Producto implements Serializable {
         this.precioventa = precioventa;
     }
 
-    public String getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(String cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
