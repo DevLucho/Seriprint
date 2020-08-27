@@ -5,15 +5,24 @@
  */
 package Controladores;
 
+import Entidades.Bodega;
 import Entidades.Insumo;
+import Entidades.Inventario;
 import Entidades.TipoDeInsumo;
+import Entidades.Usuario;
+import Facade.BodegaFacade;
 import Facade.InsumoFacade;
+import Facade.InventarioFacade;
 import Facade.TipoDeInsumoFacade;
+import Facade.UsuarioFacade;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 
 /**
  *
@@ -23,16 +32,33 @@ import javax.enterprise.context.SessionScoped;
 @SessionScoped
 public class InsumoControlador implements Serializable {
 
+    @Inject
+    private MensajeControlador mensaje;
     private Insumo insumo;
     private TipoDeInsumo tipoDeInsumo;
+    private Inventario inventario;
+    private Usuario usuario;
+    private Bodega bodega;
+    // Generar fecha y hora del sistema
+    private Calendar cal = Calendar.getInstance();
+    private Date date = cal.getTime();
     @EJB
     InsumoFacade insumoFacade;
     @EJB
     TipoDeInsumoFacade tipoDeInsumoFacade;
+    @EJB
+    UsuarioFacade usuarioFacade;
+    @EJB
+    BodegaFacade bodegaFacade;
+    @EJB
+    InventarioFacade inventarioFacade;
 
     public InsumoControlador() {
         tipoDeInsumo = new TipoDeInsumo();
         insumo = new Insumo();
+        inventario = new Inventario();
+        bodega = new Bodega();
+        usuario = new Usuario();
     }
 
     public Insumo getInsumo() {
@@ -52,10 +78,20 @@ public class InsumoControlador implements Serializable {
     }
 
     public void registrar() {
+        inventario.setIdBodega(bodegaFacade.find(bodega.getIdBodega()));
+        inventario.setIdUsuario(usuarioFacade.find(usuario.getIdUsuario()));
+        inventario.setFechaingreso(date);
+        inventario.setEstado("Stock");
+        inventarioFacade.create(inventario);
+        insumo.setIdInventario(inventario);
         insumo.setIdTipoinsumo(tipoDeInsumoFacade.find(tipoDeInsumo.getIdTipoinsumo()));
         insumoFacade.create(insumo);
+        mensaje.setMensaje("Mensaje('Insumo agregado!','Se ha adicionado el insumo al invetario.','success');");
         tipoDeInsumo = new TipoDeInsumo();
         insumo = new Insumo();
+        inventario = new Inventario();
+        bodega = new Bodega();
+        usuario = new Usuario();
     }
 
     public String preactualizar(Insumo insumoActualizar) {
@@ -64,10 +100,10 @@ public class InsumoControlador implements Serializable {
         return "editarInsumo";
     }
 
-    public String actualizar() {
+    public void actualizar() {
         insumo.setIdTipoinsumo(tipoDeInsumoFacade.find(tipoDeInsumo.getIdTipoinsumo()));
         insumoFacade.edit(insumo);
-        return "Insumo";
+        mensaje.setMensaje("MensajeRedirect('./Insumo.xhtml','Insumo modificado!','Se ha actualizado satisfactoriamente el insumo: "+insumo.getNombre()+"','success');");
     }
 
     public void eliminar(Insumo insumo) {
@@ -78,4 +114,49 @@ public class InsumoControlador implements Serializable {
     public List<Insumo> consultarTodos() {
         return insumoFacade.findAll();
     }
+
+    public List<TipoDeInsumo> consultarTipoInsumo() {
+        return tipoDeInsumoFacade.findAll();
+    }
+
+    public Inventario getInventario() {
+        return inventario;
+    }
+
+    public void setInventario(Inventario inventario) {
+        this.inventario = inventario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public Calendar getCal() {
+        return cal;
+    }
+
+    public void setCal(Calendar cal) {
+        this.cal = cal;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 }

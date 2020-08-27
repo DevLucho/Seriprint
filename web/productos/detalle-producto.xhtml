@@ -16,7 +16,8 @@
             <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
             <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
-        </h:form>        <div class="contr">
+        </h:form>        
+        <div class="contr">
             <div class="contenedor d-flex justify-content-right">
                 <div class="imagen">
                     <img class="borde col-12 col-sm-12 col-md-6 col-lg-11" src="#{productoControlador.producto.imagen}" alt=""/>
@@ -30,7 +31,15 @@
                         <hr/>
                         <p align="justify">#{productoControlador.producto.descripcion}</p>
                         <hr/>
-                        <h3>Precio unidad:       #{cotizacionControlador.getPrecioUnidad(productoControlador.producto.preciounidad)}</h3>
+                        <c:if test="#{productoControlador.producto.descuento!=null}">
+                            <h3 style="text-decoration: line-through">Precio unidad:       #{cotizacionControlador.getPrecioUnidad(productoControlador.producto.preciounidad)}</h3>
+                            <hr/>
+                            <h3>Precio oferta:       #{cotizacionControlador.getPrecioUnidad(productoControlador.producto.precioventa)}</h3>
+                            <p style="color:green;">Aplica descuento del: #{productoControlador.getDescuentoFinal(productoControlador.producto.descuento)}</p>
+                        </c:if>
+                        <c:if test="#{productoControlador.producto.descuento==null}">
+                            <h3>Precio unidad:       #{cotizacionControlador.getPrecioUnidad(productoControlador.producto.precioventa)}</h3>
+                        </c:if>
                         <hr/>
                         <h:selectOneMenu style="display: none;" value="#{cotizacionControlador.producto.idProducto}">
                             <f:selectItem itemValue="#{productoControlador.producto.idProducto}"></f:selectItem>
@@ -51,7 +60,7 @@
                         <h:message for="inputState" style="color:red"/>
                         <hr/>
                         <c:if test="#{cotizacionControlador.cotizacion.cantidad!=0}">
-                            <h3>Precio total:       #{cotizacionControlador.calcularPrecio(cotizacionControlador.cotizacion.cantidad,productoControlador.producto.preciounidad)}</h3>
+                            <h3>Precio total:       #{cotizacionControlador.calcularPrecio(cotizacionControlador.cotizacion.cantidad,productoControlador.producto.precioventa)}</h3>
                             <hr/>
                         </c:if>
                         <hr/>

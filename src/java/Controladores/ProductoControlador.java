@@ -1,11 +1,21 @@
 package Controladores;
 
+import Entidades.Bodega;
+import Entidades.Inventario;
 import Entidades.Producto;
 import Entidades.TipoDeProducto;
+import Entidades.Usuario;
+import Facade.BodegaFacade;
+import Facade.InventarioFacade;
 import Facade.ProductoFacade;
 import Facade.TipoDeProductoFacade;
+import Facade.UsuarioFacade;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -24,37 +34,69 @@ public class ProductoControlador implements Serializable {
     private MensajeControlador mensaje;
     private Producto producto;
     private TipoDeProducto tipoDeProducto;
+    private Inventario inventario;
+    private Usuario usuario;
+    private Bodega bodega;
     private boolean checkdesc;
+    private double precioUnidad;
+    private double precioVenta;
+    private double descuento;
+    // Generar fecha y hora del sistema
+    private Calendar cal = Calendar.getInstance();
+    private Date date = cal.getTime();
+
     @EJB
     ProductoFacade productoFacade;
     @EJB
+    InventarioFacade inventarioFacade;
+    @EJB
     TipoDeProductoFacade tipoDeProductoFacade;
+    @EJB
+    UsuarioFacade usuarioFacade;
+    @EJB
+    BodegaFacade bodegaFacade;
 
     public ProductoControlador() {
         tipoDeProducto = new TipoDeProducto();
         producto = new Producto();
+        inventario = new Inventario();
+        bodega = new Bodega();
+        usuario = new Usuario();
         checkdesc = false;
     }
 
     public void registrar() {
+        inventario.setIdBodega(bodegaFacade.find(bodega.getIdBodega()));
+        inventario.setIdUsuario(usuarioFacade.find(usuario.getIdUsuario()));
+        inventario.setFechaingreso(date);
+        inventario.setEstado("Stock");
+        inventarioFacade.create(inventario);
+        producto.setIdInventario(inventario);
         producto.setIdTipoproducto(tipoDeProductoFacade.find(tipoDeProducto.getIdTipoproducto()));
-        //descuento(producto);
-        productoFacade.create(producto);
-        /*
-        if(checkdesc){
-            
+        producto.setPreciounidad(precioUnidad);
+        // Calcular precio venta
+        if (checkdesc == false) {
+            producto.setPrecioventa(precioUnidad);
+        } else {
+            double descuentoTotal = ((descuento / 100) * precioUnidad);
+            producto.setPrecioventa(precioUnidad - descuentoTotal);
+            producto.setDescuento(descuento);
         }
-         */
+        productoFacade.create(producto);
         mensaje.setMensaje("MensajeRedirect('./consultar-producto.xhtml','Producto creado','Se ha creado satisfactoriamente el producto " + producto.getNombre() + "','success');");
         producto = new Producto();
         tipoDeProducto = new TipoDeProducto();
+        inventario = new Inventario();
+        bodega = new Bodega();
+        usuario = new Usuario();
+        precioUnidad = 0.0;
+        descuento = 0.0;
+        checkdesc = false;
     }
 
-    public void descuento(Producto producto) {
-        double precioTotal;
-        this.producto = producto;
-        precioTotal = ((producto.getPreciounidad() % producto.getDescuento()) * 100);
-        producto.setPrecioventa(precioTotal);
+    public String getDescuentoFinal(double descuento) {
+        DecimalFormat formato = new DecimalFormat("#");
+        return formato.format(descuento)+"%";
     }
 
     public String preactualizar(Producto productoActualizar) {
@@ -111,6 +153,70 @@ public class ProductoControlador implements Serializable {
 
     public void setCheckdesc(boolean checkdesc) {
         this.checkdesc = checkdesc;
+    }
+
+    public Inventario getInventario() {
+        return inventario;
+    }
+
+    public void setInventario(Inventario inventario) {
+        this.inventario = inventario;
+    }
+
+    public Calendar getCal() {
+        return cal;
+    }
+
+    public void setCal(Calendar cal) {
+        this.cal = cal;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Bodega getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(Bodega bodega) {
+        this.bodega = bodega;
+    }
+
+    public double getPrecioUnidad() {
+        return precioUnidad;
+    }
+
+    public void setPrecioUnidad(double precioUnidad) {
+        this.precioUnidad = precioUnidad;
+    }
+
+    public double getPrecioVenta() {
+        return precioVenta;
+    }
+
+    public void setPrecioVenta(double precioVenta) {
+        this.precioVenta = precioVenta;
+    }
+
+    public double getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(double descuento) {
+        this.descuento = descuento;
     }
 
 }

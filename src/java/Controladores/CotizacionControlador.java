@@ -18,6 +18,7 @@ import Facade.UsuarioFacade;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,7 @@ import javax.ejb.EJB;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -47,6 +49,7 @@ public class CotizacionControlador implements Serializable {
     private Producto producto;
     private Servicio servicio;
     private Estampado estampado;
+    private CorreoControlador correo;
     private List<SelectItem> cantidad; // lista para almacenar num 1-200
     // Generar numero de factura aleatorio
     Random rnd = new Random();
@@ -70,6 +73,7 @@ public class CotizacionControlador implements Serializable {
 
     @PostConstruct
     public void init() {
+        correo = new CorreoControlador();
         cotizacion = new Cotizacion();
         servicio = new Servicio();
         usuario = new Usuario();
@@ -78,7 +82,7 @@ public class CotizacionControlador implements Serializable {
     }
 
     // Generar cotizacion
-    public void registrar(int tipoCotizacion, double precioUnidad) {
+    public void registrar(int tipoCotizacion, double precioUnidad) throws NoSuchProviderException, MessagingException {
         // Generar fecha y hora actual al momento del registro
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
@@ -113,6 +117,7 @@ public class CotizacionControlador implements Serializable {
         }
         cotizacionFacade.create(cotizacion);
         mensaje.setMensaje("MensajeRedirect('../pagos/consultar-cotizacion.xhtml','Cotización generada','Su numero de cotizacion es: " + numfactura + " Ahora seras redirigido para que continues con el proceso de compra.','success');");
+        correo.enviarEmail(cotizacion.getIdUsuario().getCorreoelectronico(), "Su pedido pendiente", "Estimado cliente: "+cotizacion.getIdUsuario().getNombres()+"Su numero de factura es "+numfactura+" ");
         cotizacion = new Cotizacion();
         servicio = new Servicio();
         usuario = new Usuario();
@@ -216,6 +221,14 @@ public class CotizacionControlador implements Serializable {
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
+    }
+
+    public CorreoControlador getCorreoControlador() {
+        return correo;
+    }
+
+    public void setCorreoControlador(CorreoControlador correoControlador) {
+        this.correo = correoControlador;
     }
 
 }

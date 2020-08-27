@@ -7,7 +7,6 @@ package Entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,14 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -71,8 +68,9 @@ public class Insumo implements Serializable {
     @JoinColumn(name = "idTipo_insumo", referencedColumnName = "idTipo_insumo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoDeInsumo idTipoinsumo;
-    @OneToMany(mappedBy = "idInsumo", fetch = FetchType.LAZY)
-    private List<Inventario> inventarioList;
+    @JoinColumn(name = "idInventario", referencedColumnName = "idInventario")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Inventario idInventario;
 
     public Insumo() {
     }
@@ -137,13 +135,12 @@ public class Insumo implements Serializable {
         this.idTipoinsumo = idTipoinsumo;
     }
 
-    @XmlTransient
-    public List<Inventario> getInventarioList() {
-        return inventarioList;
+    public Inventario getIdInventario() {
+        return idInventario;
     }
 
-    public void setInventarioList(List<Inventario> inventarioList) {
-        this.inventarioList = inventarioList;
+    public void setIdInventario(Inventario idInventario) {
+        this.idInventario = idInventario;
     }
 
     @Override

@@ -75,46 +75,47 @@
                         </h:column>
                     </h:dataTable>
                 </c:if>
+                <!-- Si es operario -->
                 <c:if test="#{usuarioControlador.user.idRol.idRol==2}">
-                    <h:dataTable value="#{inventarioPedidoControlador.consultarPorAsignado(usuarioControlador.user.idUsuario)}" var="caa">
+                    <h:dataTable value="#{ordenCompraControlador.consultarPorAsignado(usuarioControlador.user.idUsuario)}" var="caa">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="NumFactura"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.idCotizacion.numFactura}"/>
+                            <h:outputText value="#{caa.idCotizacion.numFactura}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Cliente"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.idCotizacion.idUsuario.nombres}"/>
+                            <h:outputText value="#{caa.idCotizacion.idUsuario.nombres}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Producto"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.idCotizacion.idProducto.nombre}"/>
+                            <h:outputText value="#{caa.idCotizacion.idProducto.nombre}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Cantidad"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.idCotizacion.cantidad}"/>
+                            <h:outputText value="#{caa.idCotizacion.cantidad}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Total a pagar"/>
                             </f:facet>
-                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(caa.idPedido.idCotizacion.precioCompra)}"/>
+                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(caa.idCotizacion.precioCompra)}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Fecha de pago"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.fechaCompra}">
+                            <h:outputText value="#{caa.fechaCompra}">
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:outputText>-
-                            <h:outputText value="#{caa.idPedido.horaCompra}">
+                            <h:outputText value="#{caa.horaCompra}">
                                 <f:convertDateTime pattern="HH:mm:ss" />
                             </h:outputText>
                         </h:column>
@@ -122,14 +123,14 @@
                             <f:facet name="header">
                                 <h:outputText value="Estado"/>
                             </f:facet>
-                            <h:outputText value="#{caa.idPedido.idCotizacion.estado}"/>
+                            <h:outputText value="#{caa.idCotizacion.estado}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Acciones"/>
                             </f:facet>
-                            <h:commandButton value="Notificar entrega" action="#{inventarioPedidoControlador.notificarEntrega(caa.idPedido)}"/>
-                            <h:commandButton value="Proceso de produccion" action="#{inventarioPedidoControlador.cambiarEstado(caa.idPedido)}"/>
+                            <h:commandButton value="Notificar entrega" action="#{ordenCompraControlador.notificarEntrega(caa)}"/>
+                            <h:commandButton value="Proceso de produccion" action="#{ordenCompraControlador.cambiarEstado(caa)}"/>
                         </h:column>
                     </h:dataTable>
                 </c:if>
@@ -158,7 +159,7 @@
                             <f:facet name="header">
                                 <h:outputText value="Precio unidad"/>
                             </f:facet>
-                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(c.idProducto.preciounidad)}"/>
+                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(c.idProducto.precioventa)}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -179,15 +180,19 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="IdServicio"/>
+                                <h:outputText value="Servicio"/>
                             </f:facet>
-                            <h:outputText value="#{c.idServicio.idServicio}"/>
+                            <c:if test="#{c.idServicio.idServicio==null}">
+                                <h:outputText value="NO"/>
+                            </c:if>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Estampado"/>
                             </f:facet>
-                            <h:outputText value="#{c.estampado.idEstampado}"/>
+                            <c:if test="#{c.estampado.idEstampado==null}">
+                                <h:outputText value="NO"/>
+                            </c:if>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
@@ -201,6 +206,57 @@
                             </f:facet>
                             <h:commandButton value="Agregar pago" action="#{cotizacionControlador.generarPago(c)}"/>
                             <h:commandButton value="Cancelar" action="#{cotizacionControlador.cancelar(c)}"/>
+                        </h:column>
+                    </h:dataTable>
+                    <hr/>
+                    <h3>Compras finalizadas o en producción</h3>
+                    <h:dataTable value="#{ordenCompraControlador.cotizacionUsuario(usuarioControlador.user.idUsuario)}" var="oc">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="NumFactura"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.idCotizacion.numFactura}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cliente"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.idCotizacion.idUsuario.nombres}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Producto"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.idCotizacion.idProducto.nombre}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Cantidad comprada"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.idCotizacion.cantidad}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Total pagado"/>
+                            </f:facet>
+                            <h:outputText value="#{cotizacionControlador.getPrecioUnidad(oc.idCotizacion.precioCompra)}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha y hora de entrega"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.fechaEntrega}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>-
+                            <h:outputText value="#{oc.horaEntrega}">
+                                <f:convertDateTime pattern="HH:mm:ss" />
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Estado"/>
+                            </f:facet>
+                            <h:outputText value="#{oc.idCotizacion.estado}"/>
                         </h:column>
                     </h:dataTable>
                 </c:if>

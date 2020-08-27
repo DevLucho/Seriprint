@@ -13,10 +13,18 @@
         <a href="consultar-producto.xhtml">Consultar producto</a>
         <h:form>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
-        </h:form>        <f:view>
+        </h:form>   
+        <f:view>
             <h:form>
-                <h1><h:outputText value="Create/Edit"/></h1>
-                <h:panelGrid columns="2">
+                <h1><h:outputText value="Agregar producto"/></h1>
+                <h:panelGrid columns="1">
+                    <h:selectOneMenu style="display: none;" id="idUsuario" value="#{productoControlador.usuario.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required.">
+                        <f:selectItem itemValue="#{usuarioControlador.user.idUsuario}" itemLabel="#{usuarioControlador.user.nombres}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="Bodega:" for="idBodega" />
+                    <h:selectOneMenu id="idBodega" value="#{productoControlador.bodega.idBodega}" title="IdBodega" required="true" requiredMessage="The IdBodega field is required.">
+                        <f:selectItems value="#{bodegaControlador.consultarTodos()}" var="b" itemValue="#{b.idBodega}" itemLabel="#{b.ubicacion}"/>
+                    </h:selectOneMenu>
                     <h:outputLabel value="Nombre:" for="nombre" />
                     <h:inputText id="nombre" value="#{productoControlador.producto.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
                     <h:outputLabel value="Descripcion:" for="descripcion" />
@@ -24,29 +32,97 @@
                     <h:outputLabel value="Imagen:" for="imagen" />
                     <h:inputText id="imagen" value="#{productoControlador.producto.imagen}" title="Imagen" required="true" requiredMessage="The Imagen field is required."/>
                     <h:outputLabel value="Preciounidad:" for="preciounidad" />
-                    <h:inputText id="preciounidad" value="#{productoControlador.producto.preciounidad}" title="Preciounidad" required="true" requiredMessage="The Preciounidad field is required."/>
+                    <h:inputText id="preciounidad" value="#{productoControlador.precioUnidad}" title="Preciounidad" required="true" requiredMessage="The Preciounidad field is required."/>
                     <h:outputLabel value="Cantidad:" for="cantidad" />
                     <h:inputText id="cantidad" value="#{productoControlador.producto.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
                     <h:outputLabel value="IdTipoproducto:" for="idTipoproducto" />
                     <h:selectOneMenu id="idTipoproducto" value="#{productoControlador.tipoDeProducto.idTipoproducto}" title="IdTipoproducto" required="true" requiredMessage="The IdTipoproducto field is required.">
                         <f:selectItems value="#{productoControlador.consultarTipoP()}" var="tipo" itemValue="#{tipo.idTipoproducto}" itemLabel="#{tipo.nombres}"/>
                     </h:selectOneMenu>
-                    <h:selectBooleanCheckbox value="#{productoControlador.checkdesc}" onchange="submit();"/> Aplicar descuento
-                    <c:if test="#{productoControlador.checkdesc=='true'}">
-                        <h:outputLabel value="Descuento:" for="descuento" />
-                        <h:inputText id="descuento" value="#{productoControlador.producto.descuento}" title="Descuento" />%
-                    </c:if>
-                    <!--
-                    <h:outputLabel value="Precioventa:" for="precioventa" />
-                    <h:inputText id="precioventa" value="#{productoControlador.producto.precioventa}" title="Precioventa" />
-                    -->
                 </h:panelGrid>
+                <br/>
+                <h:selectBooleanCheckbox value="#{productoControlador.checkdesc}" onchange="submit();"/> Aplicar descuento
+                <br/>
+                <br/>
+                <c:if test="#{productoControlador.checkdesc=='true'}">
+                    <h:outputLabel value="Descuento:" for="descuento" />
+                    <h:inputText id="descuento" value="#{productoControlador.descuento}" title="Descuento" />%
+                </c:if><br/><br/>
                 <h:commandButton value="Agregar" action="#{productoControlador.registrar()}"></h:commandButton>
             </h:form>
         </f:view>
+        <f:view>
+
+
+            <h:form>
+                <h1><h:outputText value="Invetario productos"/></h1>
+                <h:dataTable value="#{productoControlador.consultarTodos()}" var="p">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Producto"/>
+                        </f:facet>
+                        <h:outputText value="#{p.nombre}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Cantidad"/>
+                        </f:facet>
+                        <h:outputText value="#{p.cantidad}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Precio unidad"/>
+                        </f:facet>
+                        <h:outputText value="#{p.preciounidad}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Descuento"/>
+                        </f:facet>
+                        <h:outputText value="#{p.descuento}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Precio venta"/>
+                        </f:facet>
+                        <h:outputText value="#{p.precioventa}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Fecha"/>
+                        </f:facet>
+                        <h:outputText value="#{p.idInventario.fechaingreso}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Tipo de producto"/>
+                        </f:facet>
+                        <h:outputText value="#{p.idTipoproducto.nombres}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Estado"/>
+                        </f:facet>
+                        <h:outputText value="#{p.idInventario.estado}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Acciones"/>
+                        </f:facet>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </f:view>
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- Sweet Alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="../js/alertas.js" type="text/javascript"></script>
+        <script>#{mensajeControlador.mensaje}</script>
     </h:body>
 </html>
 

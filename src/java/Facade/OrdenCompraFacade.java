@@ -37,4 +37,16 @@ public class OrdenCompraFacade extends AbstractFacade<OrdenCompra> {
         return query.getResultList();
     }
 
+    public List<OrdenCompra> consultarPorAsignado(int idUsuario) {
+        Query query = em.createQuery("SELECT u FROM OrdenCompra u WHERE u.idOperario.idUsuario=:idUsuario");
+        query.setParameter("idUsuario", idUsuario);
+        return query.getResultList();
+    }
+
+    public List<OrdenCompra> cotizacionUsuario(int idUsuario) {
+        Query query = em.createQuery("SELECT u FROM OrdenCompra u WHERE u.idCotizacion.idUsuario.idUsuario=:idUsuario AND u.idCotizacion.estado='Proceso de producción' OR u.idCotizacion.estado='Entregado'");
+        query.setParameter("idUsuario", idUsuario);
+        return query.getResultList();
+    }
+
 }

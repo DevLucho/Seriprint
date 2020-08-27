@@ -48,6 +48,14 @@ public class UsuarioControlador implements Serializable {
         usuario = new Usuario();
     }
 
+    public void registrarCliente() {
+        usuario.setIdRol(rolFacade.find(3));
+        usuario.setEstado("Activo");
+        usuarioFacade.create(usuario);
+        rol = new Rol();
+        usuario = new Usuario();
+    }
+
     public void cambiarEstado(Usuario usuario, String estado) {
         this.usuario = usuario;
         usuario.setEstado(estado);
@@ -78,8 +86,8 @@ public class UsuarioControlador implements Serializable {
     public List<Usuario> consultarEstado(String estado) {
         return usuarioFacade.consultarEstado(estado);
     }
-    
-    public List<Usuario> consultarUsuarioPorRol(int idRol){
+
+    public List<Usuario> consultarUsuarioPorRol(int idRol) {
         return usuarioFacade.consultarUsuarioPorRol(idRol);
     }
 

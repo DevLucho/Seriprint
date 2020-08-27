@@ -42,7 +42,9 @@
     <h:body>
         <h3>Usuario en la sesión: #{usuarioControlador.user.nombres} #{usuarioControlador.user.apellidos}</h3>
         <h3>Rol: #{usuarioControlador.user.idRol.nombrerol} #{usuarioControlador.user.apellidos}</h3>
-        <a href="./crear-producto.xhtml">Crear producto</a>
+        <a href="./crear-producto.xhtml">Agregar producto</a><br/>
+        <a href="../insumo/Insumo.xhtml">Agregar insumo</a><br/>
+        <a href="../pagos/consultar-cotizacion.xhtml">Cosultar cotizacion</a>
         <h:form>
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
@@ -55,10 +57,10 @@
                             <h5 class="card-title">#{p.nombre}</h5>
                             <p class="card-text">#{p.descripcion}</p>
                             <c:if test="#{p.descuento==null}">
-                                <p class="color:red;">No aplican descuentos</p>
+                                <p style="color:red;">No aplican descuentos</p>
                             </c:if>
                             <c:if test="#{p.descuento!=null}">
-                                <p class="color:green;">Aplica descuento del: #{p.descuento}</p>
+                                <p style="color:green;">Aplica descuento del: #{productoControlador.getDescuentoFinal(p.descuento)}</p>
                             </c:if>
                             <h:commandButton class="btn btn-primary d-flex justify-content-center " value="Ver detalle" action="#{productoControlador.detalleProducto(p)}"></h:commandButton>
                         </div>

@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -58,20 +59,16 @@ public class Inventario implements Serializable {
     @Size(min = 1, max = 9)
     @Column(name = "estado")
     private String estado;
-    @OneToMany(mappedBy = "idInventario", fetch = FetchType.LAZY)
-    private List<InventarioPedido> inventarioPedidoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInventario", fetch = FetchType.LAZY)
+    private List<Insumo> insumoList;
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
     @JoinColumn(name = "idBodega", referencedColumnName = "idBodega")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Bodega idBodega;
-    @JoinColumn(name = "idProducto", referencedColumnName = "idProducto")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Producto idProducto;
-    @JoinColumn(name = "idInsumo", referencedColumnName = "idInsumo")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Insumo idInsumo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInventario", fetch = FetchType.LAZY)
+    private List<Producto> productoList;
 
     public Inventario() {
     }
@@ -111,12 +108,12 @@ public class Inventario implements Serializable {
     }
 
     @XmlTransient
-    public List<InventarioPedido> getInventarioPedidoList() {
-        return inventarioPedidoList;
+    public List<Insumo> getInsumoList() {
+        return insumoList;
     }
 
-    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
-        this.inventarioPedidoList = inventarioPedidoList;
+    public void setInsumoList(List<Insumo> insumoList) {
+        this.insumoList = insumoList;
     }
 
     public Usuario getIdUsuario() {
@@ -135,20 +132,13 @@ public class Inventario implements Serializable {
         this.idBodega = idBodega;
     }
 
-    public Producto getIdProducto() {
-        return idProducto;
+    @XmlTransient
+    public List<Producto> getProductoList() {
+        return productoList;
     }
 
-    public void setIdProducto(Producto idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public Insumo getIdInsumo() {
-        return idInsumo;
-    }
-
-    public void setIdInsumo(Insumo idInsumo) {
-        this.idInsumo = idInsumo;
+    public void setProductoList(List<Producto> productoList) {
+        this.productoList = productoList;
     }
 
     @Override

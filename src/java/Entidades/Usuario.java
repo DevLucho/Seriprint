@@ -102,10 +102,10 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "idRol", referencedColumnName = "idRol")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Rol idRol;
+    @OneToMany(mappedBy = "idOperario", fetch = FetchType.LAZY)
+    private List<OrdenCompra> ordenCompraList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Cotizacion> cotizacionList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
-    private List<InventarioPedido> inventarioPedidoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private List<Inventario> inventarioList;
 
@@ -218,21 +218,21 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
+    public List<OrdenCompra> getOrdenCompraList() {
+        return ordenCompraList;
+    }
+
+    public void setOrdenCompraList(List<OrdenCompra> ordenCompraList) {
+        this.ordenCompraList = ordenCompraList;
+    }
+
+    @XmlTransient
     public List<Cotizacion> getCotizacionList() {
         return cotizacionList;
     }
 
     public void setCotizacionList(List<Cotizacion> cotizacionList) {
         this.cotizacionList = cotizacionList;
-    }
-
-    @XmlTransient
-    public List<InventarioPedido> getInventarioPedidoList() {
-        return inventarioPedidoList;
-    }
-
-    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
-        this.inventarioPedidoList = inventarioPedidoList;
     }
 
     @XmlTransient

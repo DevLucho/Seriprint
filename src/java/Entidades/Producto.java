@@ -80,11 +80,12 @@ public class Producto implements Serializable {
     private Double descuento;
     @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
     private List<Cotizacion> cotizacionList;
-    @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
-    private List<Inventario> inventarioList;
     @JoinColumn(name = "idTipo_producto", referencedColumnName = "idTipo_producto")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoDeProducto idTipoproducto;
+    @JoinColumn(name = "idInventario", referencedColumnName = "idInventario")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Inventario idInventario;
 
     public Producto() {
     }
@@ -175,21 +176,20 @@ public class Producto implements Serializable {
         this.cotizacionList = cotizacionList;
     }
 
-    @XmlTransient
-    public List<Inventario> getInventarioList() {
-        return inventarioList;
-    }
-
-    public void setInventarioList(List<Inventario> inventarioList) {
-        this.inventarioList = inventarioList;
-    }
-
     public TipoDeProducto getIdTipoproducto() {
         return idTipoproducto;
     }
 
     public void setIdTipoproducto(TipoDeProducto idTipoproducto) {
         this.idTipoproducto = idTipoproducto;
+    }
+
+    public Inventario getIdInventario() {
+        return idInventario;
+    }
+
+    public void setIdInventario(Inventario idInventario) {
+        this.idInventario = idInventario;
     }
 
     @Override

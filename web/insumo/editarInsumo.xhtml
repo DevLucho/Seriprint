@@ -2,34 +2,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <f:view>
-
-
-            <h:form>
-                <h1><h:outputText value="Create/Edit"/></h1>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="Nombre:" for="nombre" />
-                    <h:inputText id="nombre" value="#{insumoControlador.insumo.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required."/>
-                    <h:outputLabel value="Cantidad:" for="cantidad" />
-                    <h:inputText id="cantidad" value="#{insumoControlador.insumo.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
-                    <h:outputLabel value="Fechavencimiento:" for="fechavencimiento" />
-                    <h:inputText id="fechavencimiento" value="#{insumoControlador.insumo.fechavencimiento}" title="Fechavencimiento" required="true" requiredMessage="The Fechavencimiento field is required.">
-                        <f:convertDateTime pattern="yyyy-MM-dd" />
-                    </h:inputText>
-                    <h:outputLabel value="IdTipoinsumo:" for="idTipoinsumo" />
-                    <h:selectOneMenu id="idTipoinsumo" value="#{insumoControlador.insumo.idTipoinsumo}" title="IdTipoinsumo" required="true" requiredMessage="The IdTipoinsumo field is required.">
-                        <!-- TODO: update below reference to list of available items-->
-                        <f:selectItems value="#{fixme}"/>
-                    </h:selectOneMenu>
-                </h:panelGrid>
-            </h:form>
-        </f:view>
-
+        <h:form>
+            <h1><h:outputText value="Editar insumos"/></h1>
+            <h:panelGrid columns="1">
+                <h:selectOneMenu style="display: none;" id="idUsuario" value="#{insumoControlador.usuario.idUsuario}" title="IdUsuario" required="true" requiredMessage="The IdUsuario field is required." disabled="true">
+                    <f:selectItem itemValue="#{usuarioControlador.user.idUsuario}" itemLabel="#{usuarioControlador.user.nombres}"/>
+                </h:selectOneMenu>
+                <h:outputLabel value="Bodega:" for="idBodega" />
+                <h:selectOneMenu id="idBodega" value="#{insumoControlador.bodega.idBodega}" title="IdBodega" required="true" requiredMessage="The IdBodega field is required." disabled="true">
+                    <f:selectItems value="#{bodegaControlador.consultarTodos()}" var="b" itemValue="#{b.idBodega}" itemLabel="#{b.ubicacion}"/>
+                </h:selectOneMenu>
+                <h:outputLabel value="Nombre:" for="nombre" />
+                <h:inputText id="nombre" value="#{insumoControlador.insumo.nombre}" title="Nombre" required="true" requiredMessage="The Nombre field is required." disabled="true"/>
+                <h:outputLabel value="Cantidad:" for="cantidad" />
+                <h:inputText id="cantidad" value="#{insumoControlador.insumo.cantidad}" title="Cantidad" required="true" requiredMessage="The Cantidad field is required."/>
+                <h:outputLabel value="Precio de compra:" for="preciocompra" />
+                <h:inputText id="preciocompra" value="#{insumoControlador.insumo.preciocompra}" title="Preciocompra" required="true" requiredMessage="The Preciocompra field is required." disabled="true"/>
+                <h:outputLabel value="Fecha de vencimiento:" for="fechavencimiento" />
+                <h:inputText a:type="date" id="fechavencimiento" value="#{insumoControlador.insumo.fechavencimiento}" title="Fechavencimiento" required="true" requiredMessage="The Fechavencimiento field is required." disabled="true">
+                    <f:convertDateTime pattern="yyyy-MM-dd" />
+                </h:inputText>
+                <h:outputLabel value="Tipo de insumo:" for="idTipoinsumo" />
+                <h:selectOneMenu id="idTipoinsumo" value="#{insumoControlador.tipoDeInsumo.idTipoinsumo}" title="IdTipoinsumo" required="true" requiredMessage="The IdTipoinsumo field is required." disabled="true">
+                    <f:selectItems value="#{insumoControlador.consultarTipoInsumo()}" var="ti" itemValue="#{ti.idTipoinsumo}" itemLabel="#{ti.nombre}"/>
+                </h:selectOneMenu>
+            </h:panelGrid>
+            <br/>
+            <h:commandButton action="#{insumoControlador.actualizar()}" value="Guardar"/>
+        </h:form>
+        <!-- Sweet Alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+        <script src="../js/alertas.js" type="text/javascript"></script>
+        <script>#{mensajeControlador.mensaje}</script>
     </h:body>
 </html>
 

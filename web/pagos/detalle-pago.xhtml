@@ -32,8 +32,9 @@
             <h:commandButton value="Cerrar sesión" action="#{usuarioControlador.cerrarSesion()}"></h:commandButton>
         </h:form>
         <f:view>
+            <br/>
             <h:form>
-                <h:commandButton value="Registrar" action="#{inventarioPedidoControlador.registrar(ordenCompraControlador.cotizacion)}"></h:commandButton>
+                <h:commandButton value="Actualizar" action="#{ordenCompraControlador.actualizar()}"></h:commandButton>
                 <h:outputLabel value="Abona:" for="abona" />
                 <h:inputText id="abona" value="#{ordenCompraControlador.ordenCompra.abona}" title="Abona"/>
                 <br/>
@@ -43,18 +44,13 @@
                 <h:outputLabel value="Observacion:" for="observacion" />
                 <h:inputText id="observacion" value="#{ordenCompraControlador.ordenCompra.observacion}" title="Observacion" required="true" requiredMessage="The Observacion field is required."/>
                 <br/>
-                <h:selectBooleanCheckbox value="#{inventarioPedidoControlador.checked}" onchange="submit();"/>Asignar cotizacion a operario<br/>
+                <h:selectBooleanCheckbox value="#{ordenCompraControlador.checked}" onchange="submit();"/>Asignar cotizacion a operario<br/>
                 <br/>
-                <c:if test="#{inventarioPedidoControlador.checked=='true'}">
+                <c:if test="#{ordenCompraControlador.checked=='true'}">
                     <h:outputLabel value="Operario:" for="idUsuario" />
-                    <h:selectOneMenu id="idUsuario" value="#{inventarioPedidoControlador.usuario.idUsuario}" title="IdUsuario">
+                    <h:selectOneMenu id="idUsuario" value="#{ordenCompraControlador.usuario.idUsuario}" title="IdUsuario">
                         <f:selectItems value="#{usuarioControlador.consultarUsuarioPorRol(2)}" var="ur" itemValue="#{ur.idUsuario}" itemLabel="Op. #{ur.nombres} #{ur.apellidos}"/>
                     </h:selectOneMenu><br/>
-                    <br/>
-                    <h:outputLabel value="N. Factura:" for="idPedido" />
-                    <h:selectOneMenu id="idPedido" value="#{inventarioPedidoControlador.ordenCompra.idPedido}" title="IdPedido" >
-                        <f:selectItem itemValue="#{ordenCompraControlador.ordenCompra.idPedido}" itemLabel="# #{ordenCompraControlador.cotizacion.numFactura}"/>
-                    </h:selectOneMenu>
                     <br/>
                 </c:if>
                 <h:outputLabel value="Soporte:" for="soporte" /><br/>

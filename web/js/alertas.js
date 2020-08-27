@@ -1,6 +1,6 @@
 // Mensaje con texto
 function Mensaje(titulo, texto, icono) {
-    Swal.fire({title: titulo, text: texto, icon: icono, showConfirmButton: false, timer: 3000});
+    Swal.fire({title: titulo, text: texto, icon: icono, showConfirmButton: false, timer: 4000});
 };
 // Mensaje sin texto
 function Mensaje2(titulo, icono) {

@@ -5,9 +5,9 @@ USE seriprint;
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 26-08-2020 a las 01:26:28
--- Versión del servidor: 8.0.18
--- Versión de PHP: 7.3.12
+-- Tiempo de generaciÃ³n: 27-08-2020 a las 16:29:41
+-- VersiÃ³n del servidor: 8.0.18
+-- VersiÃ³n de PHP: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -80,22 +80,28 @@ CREATE TABLE IF NOT EXISTS `cotizacion` (
   `Fecha` date NOT NULL,
   `Hora` time NOT NULL,
   `Estampado` int(11) DEFAULT NULL,
-  `Estado` enum('Asignada','Cancelado','Entregado','Pendiente','Proceso de producción','Verificación de pago') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `Estado` enum('Asignada','Cancelado','Entregado','Pendiente','Proceso de producciÃ³n','VerificaciÃ³n de pago') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`idCotizacion`),
   UNIQUE KEY `num_factura` (`num_factura`),
   KEY `idRol` (`idUsuario`,`idProducto`,`idServicio`),
   KEY `idProducto` (`idProducto`),
   KEY `idServicio` (`idServicio`),
   KEY `Estampado` (`Estampado`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `cotizacion`
 --
 
 INSERT INTO `cotizacion` (`idCotizacion`, `num_factura`, `idUsuario`, `idProducto`, `idServicio`, `Detalle`, `Cantidad`, `precio_compra`, `Fecha`, `Hora`, `Estampado`, `Estado`) VALUES
-(38, 'SU7203RS', 9, 6, NULL, 'Necesito para maximo dentro de 10 dias', 26, 26000000, '2020-08-24', '23:42:38', NULL, 'Entregado'),
-(39, 'XZ5370WX', 9, 6, NULL, 'Plazo max. mañana', 32, 32000000, '2020-08-25', '00:37:16', NULL, 'Cancelado');
+(52, 'UW3155TU', 11, 19, NULL, 'detalle', 33, 660000, '2020-08-27', '01:32:48', NULL, 'Entregado'),
+(53, 'BD6260AB', 11, 19, NULL, 'asdasd', 8, 160000, '2020-08-27', '13:18:13', NULL, 'VerificaciÃ³n de pago'),
+(54, 'CE4383BC', 11, 19, NULL, 'adasdfas', 15, 300000, '2020-08-27', '13:19:50', NULL, 'Pendiente'),
+(55, 'LN4471KL', 11, 19, NULL, 'asdasd', 16, 320000, '2020-08-27', '13:21:42', NULL, 'Pendiente'),
+(56, 'GI4908FG', 11, 19, NULL, 'Este sirve', 8, 160000, '2020-08-27', '13:32:28', NULL, 'Entregado'),
+(57, 'FH10124EF', 12, 22, NULL, 'asdasdasdadasda', 65, 1950000, '2020-08-27', '14:39:56', NULL, 'Entregado'),
+(58, 'VX1743UV', 13, 22, NULL, 'asdadasd', 14, 420000, '2020-08-27', '15:52:14', NULL, 'Entregado'),
+(59, 'DF6022CD', 13, 24, NULL, 'sdfsf', 16, 1777760, '2020-08-27', '16:03:18', NULL, 'Pendiente');
 
 -- --------------------------------------------------------
 
@@ -122,20 +128,22 @@ DROP TABLE IF EXISTS `insumos`;
 CREATE TABLE IF NOT EXISTS `insumos` (
   `idInsumo` int(4) NOT NULL AUTO_INCREMENT,
   `idTipo_insumo` int(4) NOT NULL,
+  `idInventario` int(11) NOT NULL,
   `Nombre` varchar(50) NOT NULL,
   `Cantidad` int(7) NOT NULL,
   `Precio_compra` double NOT NULL,
   `Fecha_vencimiento` date NOT NULL,
   PRIMARY KEY (`idInsumo`),
-  KEY `idTipo_insumo` (`idTipo_insumo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `idTipo_insumo` (`idTipo_insumo`),
+  KEY `idInventario` (`idInventario`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `insumos`
 --
 
-INSERT INTO `insumos` (`idInsumo`, `idTipo_insumo`, `Nombre`, `Cantidad`, `Precio_compra`, `Fecha_vencimiento`) VALUES
-(1, 2, 'Limpiador axion', 2, 1200, '2020-08-22');
+INSERT INTO `insumos` (`idInsumo`, `idTipo_insumo`, `idInventario`, `Nombre`, `Cantidad`, `Precio_compra`, `Fecha_vencimiento`) VALUES
+(2, 2, 27, 'Marco ', 56, 100000, '2020-08-26');
 
 -- --------------------------------------------------------
 
@@ -147,60 +155,35 @@ DROP TABLE IF EXISTS `inventario`;
 CREATE TABLE IF NOT EXISTS `inventario` (
   `idInventario` int(4) NOT NULL AUTO_INCREMENT,
   `idUsuario` int(4) NOT NULL,
-  `idProducto` int(4) DEFAULT NULL,
-  `idInsumo` int(4) DEFAULT NULL,
   `idBodega` int(4) NOT NULL,
   `Fecha_ingreso` date NOT NULL,
   `estado` enum('Stock','Sin stock') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`idInventario`),
   KEY `idRol` (`idUsuario`),
-  KEY `idProducto` (`idProducto`,`idInsumo`,`idBodega`),
-  KEY `idBodega` (`idBodega`),
-  KEY `idInsumo` (`idInsumo`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+  KEY `idBodega` (`idBodega`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `inventario`
 --
 
-INSERT INTO `inventario` (`idInventario`, `idUsuario`, `idProducto`, `idInsumo`, `idBodega`, `Fecha_ingreso`, `estado`) VALUES
-(11, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(12, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(13, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(14, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(15, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(16, 9, 6, NULL, 4, '2020-08-25', 'Stock'),
-(17, 7, 6, NULL, 3, '2020-08-25', 'Stock');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `inventario_pedido`
---
-
-DROP TABLE IF EXISTS `inventario_pedido`;
-CREATE TABLE IF NOT EXISTS `inventario_pedido` (
-  `idInvenSoli` int(11) NOT NULL AUTO_INCREMENT,
-  `idInventario` int(11) DEFAULT NULL,
-  `idPedido` int(4) NOT NULL,
-  `idUsuario` int(11) NOT NULL,
-  `fechaSalida` date DEFAULT NULL,
-  PRIMARY KEY (`idInvenSoli`),
-  KEY `idInventario` (`idInventario`),
-  KEY `idPedido` (`idPedido`),
-  KEY `idUsuario` (`idUsuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Volcado de datos para la tabla `inventario_pedido`
---
-
-INSERT INTO `inventario_pedido` (`idInvenSoli`, `idInventario`, `idPedido`, `idUsuario`, `fechaSalida`) VALUES
-(2, NULL, 8, 8, NULL),
-(3, NULL, 8, 8, NULL),
-(4, NULL, 8, 10, NULL),
-(5, NULL, 8, 10, NULL),
-(6, NULL, 8, 10, NULL);
+INSERT INTO `inventario` (`idInventario`, `idUsuario`, `idBodega`, `Fecha_ingreso`, `estado`) VALUES
+(18, 11, 3, '2020-08-26', 'Stock'),
+(19, 11, 3, '2020-08-26', 'Stock'),
+(20, 11, 3, '2020-08-27', 'Stock'),
+(21, 11, 4, '2020-08-27', 'Stock'),
+(22, 11, 3, '2020-08-27', 'Stock'),
+(23, 11, 3, '2020-08-27', 'Stock'),
+(24, 11, 3, '2020-08-27', 'Stock'),
+(25, 11, 3, '2020-08-27', 'Stock'),
+(26, 11, 3, '2020-08-27', 'Stock'),
+(27, 7, 3, '2020-08-27', 'Stock'),
+(28, 11, 3, '2020-08-27', 'Sin stock'),
+(29, 12, 3, '2020-08-27', 'Stock'),
+(30, 12, 3, '2020-08-27', 'Stock'),
+(31, 12, 3, '2020-08-27', 'Sin stock'),
+(32, 13, 3, '2020-08-27', 'Stock'),
+(33, 13, 3, '2020-08-27', 'Stock');
 
 -- --------------------------------------------------------
 
@@ -212,6 +195,7 @@ DROP TABLE IF EXISTS `orden_compra`;
 CREATE TABLE IF NOT EXISTS `orden_compra` (
   `idPedido` int(4) NOT NULL AUTO_INCREMENT,
   `idCotizacion` int(11) NOT NULL,
+  `idOperario` int(11) DEFAULT NULL,
   `Abona` double DEFAULT NULL,
   `Saldo` double DEFAULT NULL,
   `Observacion` varchar(600) NOT NULL,
@@ -221,16 +205,20 @@ CREATE TABLE IF NOT EXISTS `orden_compra` (
   `horaEntrega` time DEFAULT NULL,
   `Soporte` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`idPedido`),
-  KEY `idCotizacion` (`idCotizacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+  KEY `idCotizacion` (`idCotizacion`),
+  KEY `idOperario` (`idOperario`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `orden_compra`
 --
 
-INSERT INTO `orden_compra` (`idPedido`, `idCotizacion`, `Abona`, `Saldo`, `Observacion`, `FechaCompra`, `horaCompra`, `fechaEntrega`, `horaEntrega`, `Soporte`) VALUES
-(8, 38, NULL, NULL, 'Esta es mi ob', '2020-08-24', '00:00:00', '2020-08-26', '01:13:00', '../'),
-(9, 39, NULL, NULL, 'sdsd', '2020-08-25', '00:37:29', NULL, NULL, 'sdsd');
+INSERT INTO `orden_compra` (`idPedido`, `idCotizacion`, `idOperario`, `Abona`, `Saldo`, `Observacion`, `FechaCompra`, `horaCompra`, `fechaEntrega`, `horaEntrega`, `Soporte`) VALUES
+(13, 52, 10, NULL, NULL, 'asdasdasda', '2020-08-27', '01:33:27', '2020-08-27', '14:24:03', '../docs/eje-factura.pdf'),
+(14, 53, NULL, NULL, NULL, 'asdasdasda', '2020-08-27', '13:18:41', NULL, NULL, '../docs/eje-factura.pdf'),
+(15, 56, 8, NULL, NULL, 'asdasdasda', '2020-08-27', '13:32:42', '2020-08-27', '16:01:45', '../docs/eje-factura.pdf'),
+(16, 57, 10, NULL, NULL, 'asdasdasda', '2020-08-27', '14:43:02', '2020-08-27', '14:46:53', '../docs/eje-factura.pdf'),
+(17, 58, 8, NULL, NULL, 'sadad', '2020-08-27', '15:52:31', '2020-08-27', '16:01:33', '../docs/eje-factura.pdf');
 
 -- --------------------------------------------------------
 
@@ -260,6 +248,7 @@ DROP TABLE IF EXISTS `productos`;
 CREATE TABLE IF NOT EXISTS `productos` (
   `idProducto` int(4) NOT NULL AUTO_INCREMENT,
   `idTipo_producto` int(4) NOT NULL,
+  `idInventario` int(11) NOT NULL,
   `Nombre` varchar(50) NOT NULL,
   `Descripcion` varchar(300) NOT NULL,
   `Imagen` varchar(100) NOT NULL,
@@ -268,15 +257,21 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `Cantidad` int(11) NOT NULL,
   `Descuento` double DEFAULT NULL,
   PRIMARY KEY (`idProducto`),
-  KEY `idTipo_producto` (`idTipo_producto`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  KEY `idTipo_producto` (`idTipo_producto`),
+  KEY `idInventario` (`idInventario`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`idProducto`, `idTipo_producto`, `Nombre`, `Descripcion`, `Imagen`, `Precio_unidad`, `Precio_venta`, `Cantidad`, `Descuento`) VALUES
-(6, 4, 'Mochila', 'Tiene cremallera Fina Fina', '../img/mochila.PNG', 1000000, NULL, 5, NULL);
+INSERT INTO `productos` (`idProducto`, `idTipo_producto`, `idInventario`, `Nombre`, `Descripcion`, `Imagen`, `Precio_unidad`, `Precio_venta`, `Cantidad`, `Descuento`) VALUES
+(19, 1, 28, 'Camiseta estampada', 'Descripcion', '../img/camiseta.PNG', 20000, 16600, -27, 17),
+(20, 1, 29, 'Camiseta estampada', 'Descripcion', '../img/camiseta.PNG', 20000, 18000, 30, 10),
+(21, 1, 30, 'Camiseta estampada', 'Descripcion', '../img/camiseta.PNG', 20000, 18000, 30, 10),
+(22, 1, 31, 'Mochila', 'Descripcion', '../img/mochila.PNG', 30000, 21000, -129, 30),
+(23, 1, 32, 'Camiseta estampada sin descuento', 'Descripcion', '../img/camiseta.PNG', 0, 0, 30, 10),
+(24, 1, 33, 'asdasdasdasd', 'asdasdasd', 'asdasdada', 111110, 111110, 50, NULL);
 
 -- --------------------------------------------------------
 
@@ -336,7 +331,7 @@ CREATE TABLE IF NOT EXISTS `servicios` (
 --
 
 INSERT INTO `servicios` (`idServicio`, `Nombre`, `Descripcion`, `Precio`) VALUES
-(1, 'Estapados', 'Sobre textiles como camisetas, toallas, overoles, Plásticos flexibles, plásticos rígidos, vidrio, metales, madera, acrilicos, poliestilenos, papel, caucho, corcho y demas solo preguntanos.', 20000);
+(1, 'Estapados', 'Sobre textiles como camisetas, toallas, overoles, PlÃ¡sticos flexibles, plÃ¡sticos rÃ­gidos, vidrio, metales, madera, acrilicos, poliestilenos, papel, caucho, corcho y demas solo preguntanos.', 20000);
 
 -- --------------------------------------------------------
 
@@ -357,8 +352,8 @@ CREATE TABLE IF NOT EXISTS `tipo_de_insumo` (
 --
 
 INSERT INTO `tipo_de_insumo` (`idTipo_insumo`, `Nombre`, `Descripcion`) VALUES
-(1, 'Emulsiones', 'Es un producto que se aplica a una pantalla con una raedera de forma manual o gracias a maquinas de emulsionado para poder serigrafiar nuestro diseño en las prendas o sobre el soporte que necesitemos serigrafiar.'),
-(2, 'Limpiadores', 'Es un disolvente de limpieza de serigrafia adecuado para limpiar plastisol en la pantalla y resto de tintas durante la impresión, la malla y los útiles de trabajo.');
+(1, 'Emulsiones', 'Es un producto que se aplica a una pantalla con una raedera de forma manual o gracias a maquinas de emulsionado para poder serigrafiar nuestro diseÃ±o en las prendas o sobre el soporte que necesitemos serigrafiar.'),
+(2, 'Limpiadores', 'Es un disolvente de limpieza de serigrafia adecuado para limpiar plastisol en la pantalla y resto de tintas durante la impresiÃ³n, la malla y los Ãºtiles de trabajo.');
 
 -- --------------------------------------------------------
 
@@ -369,7 +364,7 @@ INSERT INTO `tipo_de_insumo` (`idTipo_insumo`, `Nombre`, `Descripcion`) VALUES
 DROP TABLE IF EXISTS `tipo_de_producto`;
 CREATE TABLE IF NOT EXISTS `tipo_de_producto` (
   `idTipo_producto` int(4) NOT NULL AUTO_INCREMENT,
-  `Nombres` set('Marcos/Bastidores - Sedas/Tejidos','Escobillines/Raseros','Tintas Litográficas - Tintas para Screen','Maquinaria') NOT NULL,
+  `Nombres` set('Marcos/Bastidores - Sedas/Tejidos','Escobillines/Raseros','Tintas LitogrÃ¡ficas - Tintas para Screen','Maquinaria') NOT NULL,
   `Descripcion` varchar(300) NOT NULL,
   PRIMARY KEY (`idTipo_producto`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
@@ -379,9 +374,9 @@ CREATE TABLE IF NOT EXISTS `tipo_de_producto` (
 --
 
 INSERT INTO `tipo_de_producto` (`idTipo_producto`, `Nombres`, `Descripcion`) VALUES
-(1, 'Marcos/Bastidores - Sedas/Tejidos', 'Productos de estructura para la creación de un estampado.'),
+(1, 'Marcos/Bastidores - Sedas/Tejidos', 'Productos de estructura para la creaciÃ³n de un estampado.'),
 (2, 'Escobillines/Raseros', 'Herramientas empleadas para pasar la tinta por la pantalla y depositarla sobre la prenda o material textil.'),
-(3, 'Tintas Litográficas - Tintas para Screen', 'Tintas de impreción.'),
+(3, 'Tintas LitogrÃ¡ficas - Tintas para Screen', 'Tintas de impreciÃ³n.'),
 (4, 'Maquinaria', 'Maquinarias empleadas en cada uno de los procesos neserarios de los servicios solicitados por los clientes ya sea Estampado, Emulsionado, Recuperado de malla, Tenzado u Artes Finales.');
 
 -- --------------------------------------------------------
@@ -405,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `Estado` enum('Activo','Inactivo') NOT NULL,
   PRIMARY KEY (`idUsuario`),
   KEY `idRol` (`idRol`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -415,7 +410,10 @@ INSERT INTO `usuarios` (`idUsuario`, `idRol`, `Ndocumento`, `Nombres`, `Apellido
 (7, 1, 1009098234, 'David', 'Mendoza', 'Suba', 32991832, 'David@gmail.com', '123', '2020-01-23', 'Activo'),
 (8, 2, 100393292, 'Jorge', 'Aguirre', 'La Castellana', 82528, 'luisdahr2002@gmail.com', '123', '2020-01-23', 'Activo'),
 (9, 3, 10735232, 'Maria', 'Ezequiel', 'La loma', 12335, 'mrpte@gmial.com', '123', '2020-01-26', 'Activo'),
-(10, 2, 1089253, 'Lara', 'Lara', 'Patio bonito', 21311, 'lara@mga.com', '123', '2020-01-23', 'Activo');
+(10, 2, 1089253, 'Lara', 'Lara', 'Patio bonito', 21311, 'lara@mga.com', '123', '2020-01-23', 'Activo'),
+(11, 3, 1009095732, 'Jhon', 'Medina', 'La 8ta', 312345321, 'jhonmedina345@gmail.com', '123', '2020-08-26', 'Activo'),
+(12, 3, 10094738, 'Wilmer', 'Bohorquez', 'DSasdads', 32134234, 'wdbohorquez77@misena.edu.co', '123', '2020-01-26', 'Activo'),
+(13, 3, 10094838, 'Gozalo', 'Ortiz', 'sdadsd', 123123, 'wadsdsa', '123', '2020-01-26', 'Activo');
 
 --
 -- Restricciones para tablas volcadas
@@ -434,30 +432,22 @@ ALTER TABLE `cotizacion`
 -- Filtros para la tabla `insumos`
 --
 ALTER TABLE `insumos`
-  ADD CONSTRAINT `insumos_ibfk_1` FOREIGN KEY (`idTipo_insumo`) REFERENCES `tipo_de_insumo` (`idTipo_insumo`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `insumos_ibfk_1` FOREIGN KEY (`idTipo_insumo`) REFERENCES `tipo_de_insumo` (`idTipo_insumo`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `insumos_ibfk_2` FOREIGN KEY (`idInventario`) REFERENCES `inventario` (`idInventario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `inventario`
 --
 ALTER TABLE `inventario`
   ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`idBodega`) REFERENCES `bodega` (`idBodega`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_ibfk_3` FOREIGN KEY (`idProducto`) REFERENCES `productos` (`idProducto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_ibfk_4` FOREIGN KEY (`idInsumo`) REFERENCES `insumos` (`idInsumo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `inventario_pedido`
---
-ALTER TABLE `inventario_pedido`
-  ADD CONSTRAINT `inventario_pedido_ibfk_1` FOREIGN KEY (`idInventario`) REFERENCES `inventario` (`idInventario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_pedido_ibfk_2` FOREIGN KEY (`idPedido`) REFERENCES `orden_compra` (`idPedido`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `inventario_pedido_ibfk_3` FOREIGN KEY (`idUsuario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`idBodega`) REFERENCES `bodega` (`idBodega`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `orden_compra`
 --
 ALTER TABLE `orden_compra`
-  ADD CONSTRAINT `orden_compra_ibfk_1` FOREIGN KEY (`idCotizacion`) REFERENCES `cotizacion` (`idCotizacion`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orden_compra_ibfk_1` FOREIGN KEY (`idCotizacion`) REFERENCES `cotizacion` (`idCotizacion`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orden_compra_ibfk_2` FOREIGN KEY (`idOperario`) REFERENCES `usuarios` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `permisos`
@@ -469,7 +459,8 @@ ALTER TABLE `permisos`
 -- Filtros para la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`idTipo_producto`) REFERENCES `tipo_de_producto` (`idTipo_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`idTipo_producto`) REFERENCES `tipo_de_producto` (`idTipo_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `productos_ibfk_2` FOREIGN KEY (`idInventario`) REFERENCES `inventario` (`idInventario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `roles_has_permisos`

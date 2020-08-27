@@ -7,9 +7,7 @@ package Entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,14 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -87,8 +83,9 @@ public class OrdenCompra implements Serializable {
     @JoinColumn(name = "idCotizacion", referencedColumnName = "idCotizacion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cotizacion idCotizacion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPedido", fetch = FetchType.LAZY)
-    private List<InventarioPedido> inventarioPedidoList;
+    @JoinColumn(name = "idOperario", referencedColumnName = "idUsuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Usuario idOperario;
 
     public OrdenCompra() {
     }
@@ -184,13 +181,12 @@ public class OrdenCompra implements Serializable {
         this.idCotizacion = idCotizacion;
     }
 
-    @XmlTransient
-    public List<InventarioPedido> getInventarioPedidoList() {
-        return inventarioPedidoList;
+    public Usuario getIdOperario() {
+        return idOperario;
     }
 
-    public void setInventarioPedidoList(List<InventarioPedido> inventarioPedidoList) {
-        this.inventarioPedidoList = inventarioPedidoList;
+    public void setIdOperario(Usuario idOperario) {
+        this.idOperario = idOperario;
     }
 
     @Override
