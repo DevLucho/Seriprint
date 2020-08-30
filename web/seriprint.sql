@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `anuncios` (
   `descripcion` varchar(500) NOT NULL,
   `img` varchar(100) NOT NULL,
   PRIMARY KEY (`idAnuncio`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `estampado` (
   `img` varchar(100) NOT NULL,
   `precio` double DEFAULT NULL,
   PRIMARY KEY (`idEstampado`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
 
